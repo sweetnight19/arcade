@@ -5,7 +5,7 @@ import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
 import edu.salleurl.arcade.labyrinth.model.enums.Cell;
 import edu.salleurl.arcade.labyrinth.model.enums.Direction;
 
-public class laberinto implements LabyrinthSolver {
+public class Labyrinth implements LabyrinthSolver {
 
     @Override
     public List<Direction> solve(Cell[][] arg0, LabyrinthRenderer arg1) {
