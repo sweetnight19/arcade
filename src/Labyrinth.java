@@ -7,10 +7,13 @@ import edu.salleurl.arcade.labyrinth.model.enums.Direction;
 
 public class Labyrinth implements LabyrinthSolver {
 
+    List<Direction> directions = null;
+
     @Override
     public List<Direction> solve(Cell[][] arg0, LabyrinthRenderer arg1) {
         // TODO Auto-generated method stub
-        return null;
+        directions.add(Direction.DOWN);
+        directions.add(Direction.LEFT);
+        return directions;
     }
-
 }
