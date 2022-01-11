@@ -9,120 +9,161 @@ import edu.salleurl.arcade.labyrinth.model.enums.Direction;
 public class Labyrinth implements LabyrinthSolver {
 
     private Cell[][] matriuCells;
-    private ArrayList configuracio = new ArrayList<Direction>();
-    private int distancia;
+    private ArrayList<Direction> configuracio;
     private int labyrinthColumns;
     private int labyrinthRows;
     private int x_actual;
     private int y_actual;
     private ArrayList<Direction> xMejor;
     private int vMejor;
+    private int numDecisiones;
+    private LabyrinthRenderer renderer;
 
     public Labyrinth(int labyrinthColumns, int labyrinthRows) {
         this.labyrinthColumns = labyrinthColumns;
         this.labyrinthRows = labyrinthRows;
-        x_actual = 0;
-        y_actual = 0;
-        configuracio = new ArrayList<>();
+        x_actual = 1;
+        y_actual = 1;
+        configuracio = new ArrayList<Direction>();
+        xMejor = new ArrayList<Direction>();
+        vMejor = 0;
     }
 
     @Override
     public List<Direction> solve(Cell[][] arg0, LabyrinthRenderer arg1) {
 
         matriuCells = arg0;
+        renderer = arg1;
 
-        // cridar algoritme a traves del arg0
+        long start = System.nanoTime(); // Inicia el cronometre
+
         backtracking(configuracio, 0);
 
+        long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
+        System.out.println("Ha acanat el backtracking amb " + elapsedTime + " nanosegons");
+
         // printem per pantalla el resultat
-        arg1.render(arg0, configuracio);
+        arg1.render(arg0, xMejor);
         return configuracio;
     }
 
     public void backtracking(ArrayList<Direction> configuracio, int k) {
+        System.out.println("k: " + k);
+
+        numDecisiones = 1;
 
         configuracio = prepararRecorridoNivel(configuracio, k);
         while (hayaSucesor(configuracio, k)) {
-            configuracio = siguienteHermano(configuracio, k);
-            if (matriuCells[x_actual][y_actual] == Cell.EXIT) {
-                configuracio = prepararRecorridoNivel(configuracio, k);
-            } else {
-                backtracking(configuracio, k + 1);
-            }
 
+            System.out.println("numDecisiones: " + numDecisiones);
+
+            configuracio = siguienteHermano(configuracio, k, numDecisiones);
+            renderer.render(matriuCells, configuracio, 500);
+            // System.out.println("y_actual: " + y_actual + " x_actual: " + x_actual);
+            switch (matriuCells[y_actual][x_actual]) {
+                case EXIT:
+                    if (buena(configuracio, k)) {
+                        tratarSolucion(configuracio, k);
+                    }
+                    break;
+                default:
+                    if (buena(configuracio, k)) {
+                        System.out.println("no solucio, bona, completable");
+                        backtracking(configuracio, k + 1);
+                    }
+                    numDecisiones++;
+                    break;
+            }
         }
+
     }
 
-    proc medicaments(x: configuracio; k: enter; ref xMillor: configuracio;
- ref vMillor: enter)
-x[k]:=0
-mentre x[k]<MAX_COM fer
-x[k]:=x[k]+1
-opcio
-cas k=MAX_MED:
-
-    si bona(x,k) llavors
- tractarSolucio(x,k,xMillor,vMillor)
- fisi
-cas k<MAX_MED:
-
-    si bona(x,k)llavors
- medicaments(x,k+1,xMillor,vMillor)
- fisi
-fiopcio
-fimentre
-fiproc
-
-    private ArrayList<Direction> siguienteHermano(ArrayList<Direction> configuracio2, int k) {
-        // configuracio2.set(k, configuracio2.get(k) + 1);
-        return configuracio2;
+    private ArrayList<Direction> siguienteHermano(ArrayList<Direction> configuracio, int k, int numDecisiones) {
+        switch (numDecisiones) {
+            case 1:
+                configuracio.set(k, Direction.RIGHT);
+                break;
+            case 2:
+                configuracio.set(k, Direction.DOWN);
+                break;
+            case 3:
+                configuracio.set(k, Direction.LEFT);
+                break;
+            case 4:
+                configuracio.set(k, Direction.UP);
+                break;
+        }
+        return configuracio;
     }
 
     private boolean hayaSucesor(ArrayList<Direction> configuracio2, int k) {
-        // return configuracio2.get(k) < (labyrinthColumns * labyrinthRows);
-        return true;
+        return numDecisiones <= 4;
     }
 
     private ArrayList<Direction> prepararRecorridoNivel(ArrayList<Direction> configuracio2, int k) {
-        configuracio2.add(Direction.UP);
-        // configuracio2.set(k, Direction.UP);
-        return null;
+        configuracio2.add(Direction.RIGHT);
+        return configuracio2;
     }
 
     public boolean buena(ArrayList<Direction> configuracion, int k) {
+        int x = 1;
+        int y = 1;
 
-        distancia = 0;
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i <= k; i++) {
+            System.out.println(configuracion.get(i));
             if (configuracion.get(i) == Direction.LEFT) {
-                x_actual -= 1;
+                x -= 1;
+
             }
             if (configuracion.get(i) == Direction.RIGHT) {
-                x_actual += 1;
+                x += 1;
+
             }
             if (configuracion.get(i) == Direction.DOWN) {
-                y_actual += 1;
+                y += 1;
             }
             if (configuracion.get(i) == Direction.UP) {
-                y_actual -= 1;
-            }
-            if (matriuCells[x_actual][y_actual] == Cell.WALL || matriuCells[x_actual][y_actual] == Cell.EMPTY) {
-                return false;
-            }
+                y -= 1;
 
+            }
         }
-        distancia++;
+        if (x < 0 || x >= labyrinthColumns || y < 0 || y >= labyrinthRows) {
+            // System.out.println("valors negatius");
+            return false;
+        }
+        if (matriuCells[y][x] == Cell.WALL) {
+            // System.out.println("mur");
+            return false;
+        }
+        System.out.println("buena");
+        System.out.println("x: " + x + " y: " + y);
+        System.out.println("x_actual: " + x_actual + " y_actual: " + y_actual);
+
+        switch (configuracion.get(k)) {
+            case UP:
+                x_actual -= 1;
+                break;
+            case DOWN:
+                x_actual += 1;
+                break;
+            case LEFT:
+                y_actual -= 1;
+                break;
+            case RIGHT:
+                y_actual += 1;
+                break;
+            default:
+                break;
+        }
         return true;
+
     }
 
     public void tratarSolucion(ArrayList<Direction> configuracio, int k) {
-        int dist = 0;
 
-        for (int i = 0; i < k; i++) {
-            dist = distancia + 1;
-        }
-        if (dist < vMejor) {
-            xMejor = configuracio;
-            vMejor = dist;
+        if (k < vMejor || vMejor == 0) {
+            vMejor = k;
+            xMejor = (ArrayList) configuracio.clone();
         }
     }
 }

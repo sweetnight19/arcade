@@ -8,7 +8,7 @@ public class Menu {
     public void show() {
         final int MIN = 4;
 
-        int option = 0, labyrinthColumns = 20, labyrinthRows = 20, wordsColumns = 20, wordsRows = 20;
+        int option = 0, labyrinthColumns = 9, labyrinthRows = 9, wordsColumns = 20, wordsRows = 20;
         Scanner sc = new Scanner(System.in);
 
         while (option != 4) {
