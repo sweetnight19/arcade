@@ -10,8 +10,7 @@ public class Labyrinth implements LabyrinthSolver {
 
     private Cell[][] matriuCells;
     private ArrayList<Direction> configuracio;
-    private int labyrinthColumns;
-    private int labyrinthRows;
+    private int size;
     private int x_actual;
     private int y_actual;
     private ArrayList<Direction> xMejor;
@@ -19,9 +18,8 @@ public class Labyrinth implements LabyrinthSolver {
     private int numDecisiones;
     private LabyrinthRenderer renderer;
 
-    public Labyrinth(int labyrinthColumns, int labyrinthRows) {
-        this.labyrinthColumns = labyrinthColumns;
-        this.labyrinthRows = labyrinthRows;
+    public Labyrinth(int size) {
+        this.size = size;
         x_actual = 1;
         y_actual = 1;
         configuracio = new ArrayList<Direction>();
@@ -31,51 +29,56 @@ public class Labyrinth implements LabyrinthSolver {
 
     @Override
     public List<Direction> solve(Cell[][] arg0, LabyrinthRenderer arg1) {
-
         matriuCells = arg0;
         renderer = arg1;
 
         long start = System.nanoTime(); // Inicia el cronometre
-
         backtracking(configuracio, 0);
-
         long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-        System.out.println("Ha acanat el backtracking amb " + elapsedTime + " nanosegons");
+        System.out.println("Ha acabat el backtracking amb " + elapsedTime / 1000000000 + " segons");
 
         // printem per pantalla el resultat
         arg1.render(arg0, xMejor);
         return configuracio;
     }
 
-    public void backtracking(ArrayList<Direction> configuracio, int k) {
+    private void backtracking(ArrayList<Direction> configuracio, int k) {
         System.out.println("k: " + k);
+        System.out.println("Que hi ha? -> " + matriuCells[y_actual][x_actual]);
+        // System.out.println("y_actual: " + y_actual + " x_actual: " + x_actual);
 
         numDecisiones = 1;
+        configuracio = preparaRecorridoNivel(configuracio, k);
 
-        configuracio = prepararRecorridoNivel(configuracio, k);
-        while (hayaSucesor(configuracio, k)) {
-
-            System.out.println("numDecisiones: " + numDecisiones);
+        while (haySucesor(configuracio, k)) {
 
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            renderer.render(matriuCells, configuracio, 500);
-            // System.out.println("y_actual: " + y_actual + " x_actual: " + x_actual);
+            renderer.render(matriuCells, configuracio, 100);
+
             switch (matriuCells[y_actual][x_actual]) {
                 case EXIT:
-                    if (buena(configuracio, k)) {
+                    if (buena(configuracio, k, numDecisiones)) {
                         tratarSolucion(configuracio, k);
                     }
                     break;
                 default:
-                    if (buena(configuracio, k)) {
-                        System.out.println("no solucio, bona, completable");
+                    if (buena(configuracio, k, numDecisiones)) {
                         backtracking(configuracio, k + 1);
                     }
-                    numDecisiones++;
                     break;
             }
+            numDecisiones++;
         }
 
+    }
+
+    private ArrayList<Direction> preparaRecorridoNivel(ArrayList<Direction> configuracio, int k) {
+        configuracio.add(Direction.RIGHT);
+        return configuracio;
+    }
+
+    private boolean haySucesor(ArrayList<Direction> configuracio2, int k) {
+        return numDecisiones <= 4;
     }
 
     private ArrayList<Direction> siguienteHermano(ArrayList<Direction> configuracio, int k, int numDecisiones) {
@@ -96,70 +99,47 @@ public class Labyrinth implements LabyrinthSolver {
         return configuracio;
     }
 
-    private boolean hayaSucesor(ArrayList<Direction> configuracio2, int k) {
-        return numDecisiones <= 4;
-    }
-
-    private ArrayList<Direction> prepararRecorridoNivel(ArrayList<Direction> configuracio2, int k) {
-        configuracio2.add(Direction.RIGHT);
-        return configuracio2;
-    }
-
-    public boolean buena(ArrayList<Direction> configuracion, int k) {
-        int x = 1;
-        int y = 1;
+    private boolean buena(ArrayList<Direction> configuracion, int k, int numDecisiones) {
+        int x = 1, y = 1;
 
         for (int i = 0; i <= k; i++) {
-            System.out.println(configuracion.get(i));
-            if (configuracion.get(i) == Direction.LEFT) {
-                x -= 1;
-
-            }
-            if (configuracion.get(i) == Direction.RIGHT) {
-                x += 1;
-
-            }
-            if (configuracion.get(i) == Direction.DOWN) {
-                y += 1;
-            }
-            if (configuracion.get(i) == Direction.UP) {
-                y -= 1;
-
+            switch (configuracion.get(i)) {
+                case UP:
+                    y--;
+                    break;
+                case DOWN:
+                    y++;
+                    break;
+                case LEFT:
+                    x--;
+                    break;
+                case RIGHT:
+                    x++;
+                    break;
             }
         }
-        if (x < 0 || x >= labyrinthColumns || y < 0 || y >= labyrinthRows) {
-            // System.out.println("valors negatius");
-            return false;
+
+        // Si la posicio actual es la sortida, retornem true
+        if (matriuCells[y][x] == Cell.EXIT) {
+            System.out.println("Sortida " + x + " " + y);
+            x_actual = x;
+            y_actual = y;
+            return true;
         }
+
+        // Si la posicio actual es una pared, retornem false
         if (matriuCells[y][x] == Cell.WALL) {
-            // System.out.println("mur");
+            System.out.println("Pared " + numDecisiones);
             return false;
         }
-        System.out.println("buena");
-        System.out.println("x: " + x + " y: " + y);
-        System.out.println("x_actual: " + x_actual + " y_actual: " + y_actual);
 
-        switch (configuracion.get(k)) {
-            case UP:
-                x_actual -= 1;
-                break;
-            case DOWN:
-                x_actual += 1;
-                break;
-            case LEFT:
-                y_actual -= 1;
-                break;
-            case RIGHT:
-                y_actual += 1;
-                break;
-            default:
-                break;
-        }
+        x_actual = x;
+        y_actual = y;
+        System.out.println("Buena decision: " + numDecisiones);
         return true;
-
     }
 
-    public void tratarSolucion(ArrayList<Direction> configuracio, int k) {
+    private void tratarSolucion(ArrayList<Direction> configuracio, int k) {
 
         if (k < vMejor || vMejor == 0) {
             vMejor = k;
