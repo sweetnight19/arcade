@@ -1,4 +1,3 @@
-import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,15 +8,22 @@ import edu.salleurl.arcade.labyrinth.model.enums.Direction;
 
 public class Labyrinth implements LabyrinthSolver {
 
-    Cell[][] matriuCells;
-    ArrayList<Direction> configuracio;
-    int distancia;
-    int labyrinthColumns;
-    int labyrinthRows;
+    private Cell[][] matriuCells;
+    private ArrayList configuracio = new ArrayList<Direction>();
+    private int distancia;
+    private int labyrinthColumns;
+    private int labyrinthRows;
+    private int x_actual;
+    private int y_actual;
+    private ArrayList<Direction> xMejor;
+    private int vMejor;
 
     public Labyrinth(int labyrinthColumns, int labyrinthRows) {
         this.labyrinthColumns = labyrinthColumns;
         this.labyrinthRows = labyrinthRows;
+        x_actual = 0;
+        y_actual = 0;
+        configuracio = new ArrayList<>();
     }
 
     @Override
@@ -26,7 +32,7 @@ public class Labyrinth implements LabyrinthSolver {
         matriuCells = arg0;
 
         // cridar algoritme a traves del arg0
-        backtracking(configuracio, k);
+        backtracking(configuracio, 0);
 
         // printem per pantalla el resultat
         arg1.render(arg0, configuracio);
@@ -38,24 +44,17 @@ public class Labyrinth implements LabyrinthSolver {
         configuracio = prepararRecorridoNivel(configuracio, k);
         while (hayaSucesor(configuracio, k)) {
             configuracio = siguienteHermano(configuracio, k);
-            switch (key) {
-                case m[x_actual][y_actual] = Cell.EXIT:
-                    // caso Factible(x): // tratar solución según necesidades
-                    // caso ¬Factible(x): // no hacer nada, solución incorrecta
-                    break;
-                case m[x_actual][y_actual] != Cell.EXIT:
-                    // caso completable(x,k): Backtracking(x,k+1)
-                    // caso ¬completable(x,k): // no hacer nada, poda
-                    break;
-                default:
-                    break;
+            if (matriuCells[x_actual][y_actual] == Cell.EXIT) {
+                configuracio = prepararRecorridoNivel(configuracio, k);
+            } else {
+                backtracking(configuracio, k + 1);
             }
+
         }
     }
 
     private ArrayList<Direction> siguienteHermano(ArrayList<Direction> configuracio2, int k) {
-        configuracio2.get(k) = configuracio2.get(i) + 1;
-
+        // configuracio2.set(k, configuracio2.get(k) + 1);
         return configuracio2;
     }
 
@@ -65,30 +64,30 @@ public class Labyrinth implements LabyrinthSolver {
     }
 
     private ArrayList<Direction> prepararRecorridoNivel(ArrayList<Direction> configuracio2, int k) {
-        configuracio2.get(Pk - 1) = 0;
+        configuracio2.set(k - 1, Direction.UP);
         return null;
     }
 
     public boolean buena(ArrayList<Direction> configuracion, int k) {
-        boolean correcto = true;
 
         distancia = 0;
         for (int i = 0; i < k; i++) {
             if (configuracion.get(i) == Direction.LEFT) {
-                // x_actual := x_actual-1
+                x_actual -= 1;
             }
             if (configuracion.get(i) == Direction.RIGHT) {
-                // x_actual := x_actual+1
+                x_actual += 1;
             }
             if (configuracion.get(i) == Direction.DOWN) {
-                // y_actual := y_actual+1
+                y_actual += 1;
             }
             if (configuracion.get(i) == Direction.UP) {
-                // y_actual := y_actual-1
+                y_actual -= 1;
             }
-            // si m[x_actual][y_actual] = 1 || m[x_actual][y_actual] = -1
-            // devuelve falso
-            // finsi
+            if (matriuCells[x_actual][y_actual] == Cell.WALL || matriuCells[x_actual][y_actual] == Cell.EMPTY) {
+                return false;
+            }
+
         }
         distancia++;
         return true;
