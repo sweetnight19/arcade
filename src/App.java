@@ -1,13 +1,10 @@
-import edu.salleurl.arcade.Arcade;
-import edu.salleurl.arcade.ArcadeBuilder;
-import edu.salleurl.arcade.labyrinth.controller.LabyrinthRenderer;
-import edu.salleurl.arcade.labyrinth.model.enums.Cell;
-import edu.salleurl.arcade.words.controller.WordsRenderer;
-
 import java.io.IOException;
 import java.util.Scanner;
 
 import com.github.lalyos.jfiglet.FigletFont;
+
+import edu.salleurl.arcade.Arcade;
+import edu.salleurl.arcade.ArcadeBuilder;
 
 public class App {
 
@@ -26,10 +23,10 @@ public class App {
         final int MIN = 4;
 
         int option = 0;
-        int labyrinthColumns = 0;
-        int labyrinthRows = 0;
-        int wordsColumns = 0;
-        int wordsRows = 0;
+        int labyrinthColumns = 10;
+        int labyrinthRows = 10;
+        int wordsColumns = 10;
+        int wordsRows = 10;
         Scanner sc = new Scanner(System.in);
 
         while (option != 4) {
@@ -114,41 +111,22 @@ public class App {
     }
 
     private static void start(int labyrinthColumns, int labyrinthRows, int wordsColumns, int wordsRows) {
-        Labyrinth laberinto = new Labyrinth();
+        Labyrinth laberinto = new Labyrinth(labyrinthColumns, labyrinthRows);
         WordSearch palabras = new WordSearch();
 
-        // crear matriz de laberinto
-        Cell[][] laberintoMatriz = new Cell[labyrinthColumns][labyrinthRows];
-        for (int i = 0; i < labyrinthColumns; i++) {
-            for (int j = 0; j < labyrinthRows; j++) {
-                laberintoMatriz[i][j] = Cell.EMPTY;
-            }
-        }
-        // laberinto.solve(laberintoMatriz, laberintoRenderer);
-
-        // crear matriz de palabras
-        String[][] palabrasMatriz = new String[wordsColumns][wordsRows];
-        for (int i = 0; i < wordsColumns; i++) {
-            for (int j = 0; j < wordsRows; j++) {
-                palabrasMatriz[i][j] = "";
-            }
-            // WordsRenderer wordRender = new WordsRenderer();
-            // palabras.solve(palabrasMatriz, "BRANCH", wordRender);
-
-            Arcade arcade = new ArcadeBuilder()
-                    .setLabyrinthColumns(labyrinthColumns)
-                    .setLabyrinthRows(labyrinthRows)
-                    .setWordsColumns(wordsColumns)
-                    .setWordsRows(wordsRows)
-                    // Opcional, per fixar un input en comptes d'obtenir-ne un d'aleatori
-                    .setSeed(42)
-                    // DemoLabyrinthSolver implementa LabyrinthSolver
-                    .setLabyrinthSolver(laberinto)
-                    // DemoWordsSolver implementa WordsSolver
-                    .setWordsSolver(palabras)
-                    .build();
-            arcade.run();
-        }
+        Arcade arcade = new ArcadeBuilder()
+                .setLabyrinthColumns(labyrinthColumns)
+                .setLabyrinthRows(labyrinthRows)
+                .setWordsColumns(wordsColumns)
+                .setWordsRows(wordsRows)
+                // Opcional, per fixar un input en comptes d'obtenir-ne un d'aleatori
+                .setSeed(42)
+                // DemoLabyrinthSolver implementa LabyrinthSolver
+                .setLabyrinthSolver(laberinto)
+                // DemoWordsSolver implementa WordsSolver
+                .setWordsSolver(palabras)
+                .build();
+        arcade.run();
 
     }
 }
