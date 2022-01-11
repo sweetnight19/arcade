@@ -8,7 +8,7 @@ public class Menu {
     public void show() {
         final int MIN = 4;
 
-        int option = 0, labyrinthColumns = 10, labyrinthRows = 10, wordsColumns = 10, wordsRows = 10;
+        int option = 0, labyrinthColumns = 20, labyrinthRows = 20, wordsColumns = 20, wordsRows = 20;
         Scanner sc = new Scanner(System.in);
 
         while (option != 4) {
@@ -21,18 +21,18 @@ public class Menu {
                 case 1:
                     // Arcade de Laberintos
                     labyrinthColumns = readOption("Ingrese el número de columnas del laberinto: ", MIN,
-                            labyrinthColumns);
+                            labyrinthColumns, sc);
 
                     labyrinthRows = readOption("Ingrese el número de filas del laberinto: ", MIN,
-                            labyrinthRows);
+                            labyrinthRows, sc);
 
                     break;
                 case 2:
                     // Arcade de Palabras
                     wordsColumns = readOption("Ingrese el número de columnas de la sopa de palabras: ", MIN,
-                            wordsColumns);
+                            wordsColumns, sc);
 
-                    wordsRows = readOption("Ingrese el número de filas de la sopa de palabras: ", MIN, wordsRows);
+                    wordsRows = readOption("Ingrese el número de filas de la sopa de palabras: ", MIN, wordsRows, sc);
 
                     break;
                 case 3:
@@ -60,9 +60,8 @@ public class Menu {
         }
     }
 
-    private int readOption(String string, int mIN, int labyrinthColumns) {
-        int var = 0;
-        Scanner sc = new Scanner(System.in);
+    private int readOption(String string, int mIN, int labyrinthColumns, Scanner sc) {
+        int var = 10;
 
         while (var <= mIN) {
             System.out.print(string);
@@ -72,8 +71,6 @@ public class Menu {
                 labyrinthColumns = 0;
             }
         }
-        sc.close();
-
         return var;
     }
 

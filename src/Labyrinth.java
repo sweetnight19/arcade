@@ -53,6 +53,26 @@ public class Labyrinth implements LabyrinthSolver {
         }
     }
 
+    proc medicaments(x: configuracio; k: enter; ref xMillor: configuracio;
+ ref vMillor: enter)
+x[k]:=0
+mentre x[k]<MAX_COM fer
+x[k]:=x[k]+1
+opcio
+cas k=MAX_MED:
+
+    si bona(x,k) llavors
+ tractarSolucio(x,k,xMillor,vMillor)
+ fisi
+cas k<MAX_MED:
+
+    si bona(x,k)llavors
+ medicaments(x,k+1,xMillor,vMillor)
+ fisi
+fiopcio
+fimentre
+fiproc
+
     private ArrayList<Direction> siguienteHermano(ArrayList<Direction> configuracio2, int k) {
         // configuracio2.set(k, configuracio2.get(k) + 1);
         return configuracio2;
@@ -64,7 +84,8 @@ public class Labyrinth implements LabyrinthSolver {
     }
 
     private ArrayList<Direction> prepararRecorridoNivel(ArrayList<Direction> configuracio2, int k) {
-        configuracio2.set(k - 1, Direction.UP);
+        configuracio2.add(Direction.UP);
+        // configuracio2.set(k, Direction.UP);
         return null;
     }
 
