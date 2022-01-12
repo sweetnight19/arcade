@@ -6,14 +6,14 @@ import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
 import edu.salleurl.arcade.labyrinth.model.enums.Cell;
 import edu.salleurl.arcade.labyrinth.model.enums.Direction;
 
-public class Labyrinth implements LabyrinthSolver {
+public class BacktrackingWithOpt implements LabyrinthSolver {
 
     private Cell[][] matriuCells;
     private ArrayList<Direction> configuracio;
     private ArrayList<Direction> xMejor;
     private int vMejor;
 
-    public Labyrinth() {
+    public BacktrackingWithOpt() {
         configuracio = new ArrayList<Direction>();
         xMejor = new ArrayList<Direction>();
         vMejor = 0;
@@ -48,7 +48,10 @@ public class Labyrinth implements LabyrinthSolver {
                     break;
                 default:
                     if (buena(configuracio, k, numDecisiones)) {
-                        backtracking(configuracio, k + 1);
+                        if (k < vMejor || vMejor == 0) { // Si puede ser mejor que el anterior o no se ha calculado
+                                                         // ninguna solucion
+                            backtracking(configuracio, k + 1);
+                        }
                     }
                     break;
             }

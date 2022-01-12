@@ -2,15 +2,17 @@ import java.util.Scanner;
 
 import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
+import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
+import edu.salleurl.arcade.words.model.WordsSolver;
 
 public class Menu {
 
     final int MIN = 4;
-    final int SIZE = 21;
+    final int SIZE = 85;
 
     public void show() {
 
-        int option = 0;
+        int option = 0, backOption = 0;
         Scanner sc = new Scanner(System.in);
 
         while (option != 4) {
@@ -22,13 +24,20 @@ public class Menu {
             switch (option) {
                 case 1:
                     // Arcade de Laberintos
+
+                    while (backOption == 0) {
+                        System.out.println("1. Backtracking");
+                        System.out.println("2. Backtracking con poda");
+                        backOption = sc.nextInt();
+                    }
+
                     break;
                 case 2:
                     // Arcade de Palabras
                     break;
                 case 3:
                     // Iniciar
-                    start();
+                    start(backOption);
                     break;
                 case 4:
                     System.out.println("Saliendo...");
@@ -53,10 +62,23 @@ public class Menu {
         System.out.print("Ingrese una opción: ");
     }
 
-    private void start() {
-        Labyrinth laberinto = new Labyrinth();
-        WordSearch palabras = new WordSearch();
+    private void start(int backOption) {
 
+        if (backOption == 1) {
+            // Backtracking
+            Backtracking laberinto = new Backtracking();
+            WordSearch palabras = new WordSearch();
+            launch(laberinto, palabras);
+
+        } else if (backOption == 2) {
+            // Backtracking con poda
+            BacktrackingWithOpt laberinto = new BacktrackingWithOpt();
+            WordSearch palabras = new WordSearch();
+            launch(laberinto, palabras);
+        }
+    }
+
+    private void launch(LabyrinthSolver laberinto, WordsSolver palabras) {
         Arcade arcade = new ArcadeBuilder()
                 .setLabyrinthColumns(SIZE)
                 .setLabyrinthRows(SIZE)
@@ -70,7 +92,6 @@ public class Menu {
                 .setWordsSolver(palabras)
                 .build();
         arcade.run();
-
     }
 
 }
