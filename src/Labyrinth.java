@@ -10,18 +10,10 @@ public class Labyrinth implements LabyrinthSolver {
 
     private Cell[][] matriuCells;
     private ArrayList<Direction> configuracio;
-    private int size;
-    private int x_actual;
-    private int y_actual;
     private ArrayList<Direction> xMejor;
     private int vMejor;
-    private int numDecisiones;
-    private LabyrinthRenderer renderer;
 
-    public Labyrinth(int size) {
-        this.size = size;
-        x_actual = 1;
-        y_actual = 1;
+    public Labyrinth() {
         configuracio = new ArrayList<Direction>();
         xMejor = new ArrayList<Direction>();
         vMejor = 0;
@@ -30,32 +22,25 @@ public class Labyrinth implements LabyrinthSolver {
     @Override
     public List<Direction> solve(Cell[][] arg0, LabyrinthRenderer arg1) {
         matriuCells = arg0;
-        renderer = arg1;
 
         long start = System.nanoTime(); // Inicia el cronometre
         backtracking(configuracio, 0);
         long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-        System.out.println("Ha acabat el backtracking amb " + elapsedTime / 1000000000 + " segons");
+        System.out.println("Ha acabat el backtracking amb " + elapsedTime / 1000000 + " milisegons");
 
         // printem per pantalla el resultat
-        arg1.render(arg0, xMejor);
-        return configuracio;
+        arg1.render(arg0, xMejor.subList(0, vMejor));
+        return xMejor.subList(0, vMejor);
     }
 
     private void backtracking(ArrayList<Direction> configuracio, int k) {
-        System.out.println("k: " + k);
-        System.out.println("Que hi ha? -> " + matriuCells[y_actual][x_actual]);
-        // System.out.println("y_actual: " + y_actual + " x_actual: " + x_actual);
+        int numDecisiones = 1;
 
-        numDecisiones = 1;
         configuracio = preparaRecorridoNivel(configuracio, k);
-
-        while (haySucesor(configuracio, k)) {
-
+        while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            renderer.render(matriuCells, configuracio, 100);
-
-            switch (matriuCells[y_actual][x_actual]) {
+            // renderer.render(matriuCells, configuracio.subList(0, k), 10);
+            switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {
                         tratarSolucion(configuracio, k);
@@ -72,12 +57,37 @@ public class Labyrinth implements LabyrinthSolver {
 
     }
 
+    private Cell mirarPosicio(ArrayList<Direction> configuracio, int k) {
+        int x = 1;
+        int y = 1;
+
+        // posicio actual
+        for (int i = 0; i < k; i++) {
+            switch (configuracio.get(i)) {
+                case UP:
+                    y--;
+                    break;
+                case DOWN:
+                    y++;
+                    break;
+                case LEFT:
+                    x--;
+                    break;
+                case RIGHT:
+                    x++;
+                    break;
+            }
+        }
+
+        return matriuCells[y][x];
+    }
+
     private ArrayList<Direction> preparaRecorridoNivel(ArrayList<Direction> configuracio, int k) {
         configuracio.add(Direction.RIGHT);
         return configuracio;
     }
 
-    private boolean haySucesor(ArrayList<Direction> configuracio2, int k) {
+    private boolean haySucesor(ArrayList<Direction> configuracio2, int k, int numDecisiones) {
         return numDecisiones <= 4;
     }
 
@@ -100,8 +110,14 @@ public class Labyrinth implements LabyrinthSolver {
     }
 
     private boolean buena(ArrayList<Direction> configuracion, int k, int numDecisiones) {
-        int x = 1, y = 1;
+        int x = 1, x_calculada = 1;
+        int y = 1, y_calculada = 1;
 
+        if (mirarPosicio(configuracion, k) == Cell.EXIT) {
+            return true;
+        }
+
+        // posicio actual
         for (int i = 0; i <= k; i++) {
             switch (configuracion.get(i)) {
                 case UP:
@@ -119,23 +135,33 @@ public class Labyrinth implements LabyrinthSolver {
             }
         }
 
-        // Si la posicio actual es la sortida, retornem true
-        if (matriuCells[y][x] == Cell.EXIT) {
-            System.out.println("Sortida " + x + " " + y);
-            x_actual = x;
-            y_actual = y;
-            return true;
-        }
-
-        // Si la posicio actual es una pared, retornem false
+        // si la posicio actual es una pared, no es buena
         if (matriuCells[y][x] == Cell.WALL) {
-            System.out.println("Pared " + numDecisiones);
             return false;
         }
 
-        x_actual = x;
-        y_actual = y;
-        System.out.println("Buena decision: " + numDecisiones);
+        // posicio calculada
+        for (int j = 0; j < k; j++) {
+            switch (configuracion.get(j)) {
+                case UP:
+                    y_calculada--;
+                    break;
+                case DOWN:
+                    y_calculada++;
+                    break;
+                case LEFT:
+                    x_calculada--;
+                    break;
+                case RIGHT:
+                    x_calculada++;
+                    break;
+            }
+            // si la posicio calculada esta en la actual, significa que hemos pasado por
+            // ella
+            if (x == x_calculada && y == y_calculada) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -143,7 +169,7 @@ public class Labyrinth implements LabyrinthSolver {
 
         if (k < vMejor || vMejor == 0) {
             vMejor = k;
-            xMejor = (ArrayList) configuracio.clone();
+            xMejor = new ArrayList<Direction>(configuracio);
         }
     }
 }

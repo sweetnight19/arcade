@@ -22,27 +22,9 @@ public class Menu {
             switch (option) {
                 case 1:
                     // Arcade de Laberintos
-                    /*
-                     * labyrinthColumns =
-                     * readOption("Ingrese el número de columnas del laberinto: ", MIN,
-                     * labyrinthColumns, sc);
-                     * 
-                     * labyrinthRows = readOption("Ingrese el número de filas del laberinto: ", MIN,
-                     * labyrinthRows, sc);
-                     */
-
                     break;
                 case 2:
                     // Arcade de Palabras
-                    /*
-                     * wordsColumns =
-                     * readOption("Ingrese el número de columnas de la sopa de palabras: ", MIN,
-                     * wordsColumns, sc);
-                     * 
-                     * wordsRows = readOption("Ingrese el número de filas de la sopa de palabras: ",
-                     * MIN, wordsRows, sc);
-                     */
-
                     break;
                 case 3:
                     // Iniciar
@@ -61,20 +43,6 @@ public class Menu {
         }
     }
 
-    private int readOption(String string, int mIN, int labyrinthColumns, Scanner sc) {
-        int var = 10;
-
-        while (var <= mIN) {
-            System.out.print(string);
-            var = sc.nextInt();
-            if (var <= mIN) {
-                System.out.println("El número de debe ser mayor a " + mIN);
-                labyrinthColumns = 0;
-            }
-        }
-        return var;
-    }
-
     private void printMenu() {
         System.out.println();
         System.out.println("Indicar las opciones de Arcade:\n");
@@ -86,7 +54,7 @@ public class Menu {
     }
 
     private void start() {
-        Labyrinth laberinto = new Labyrinth(SIZE);
+        Labyrinth laberinto = new Labyrinth();
         WordSearch palabras = new WordSearch();
 
         Arcade arcade = new ArcadeBuilder()
