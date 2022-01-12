@@ -29,8 +29,8 @@ public class Menu {
                     // Arcade de Laberintos
 
                     while (backOption == 0) {
-                        System.out.println("1. Backtracking");
-                        System.out.println("2. Backtracking con poda");
+                        System.out.println("\t1. Backtracking");
+                        System.out.println("\t2. Backtracking con poda");
                         backOption = sc.nextInt();
                     }
 
@@ -40,7 +40,12 @@ public class Menu {
                     break;
                 case 3:
                     // Iniciar
-                    start(backOption);
+                    if (backOption == 0) {
+                        System.out.println("Te falta elegir un algoritmo de Laberinto");
+                    } else {
+                        start(backOption);
+
+                    }
                     break;
                 case 4:
                     System.out.println("Saliendo...");

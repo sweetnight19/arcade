@@ -28,7 +28,7 @@ public class BacktrackingWithOptLab implements LabyrinthSolver {
         long start = System.nanoTime(); // Inicia el cronometre
         backtracking(configuracio, 0);
         long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-        System.out.println("Ha acabat el backtracking amb " + elapsedTime / 1000000 + " milisegons");
+        System.out.println("Ha acabat el backtracking amb poda amb " + elapsedTime / 1000000 + " milisegons");
 
         // printem per pantalla el resultat
         arg1.render(arg0, xMejor.subList(0, vMejor));

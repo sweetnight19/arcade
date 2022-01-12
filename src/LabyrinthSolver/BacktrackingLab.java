@@ -3,6 +3,8 @@ package LabyrinthSolver;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Renderer;
+
 import edu.salleurl.arcade.labyrinth.controller.LabyrinthRenderer;
 import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
 import edu.salleurl.arcade.labyrinth.model.enums.Cell;
@@ -14,6 +16,7 @@ public class BacktrackingLab implements LabyrinthSolver {
     private ArrayList<Direction> configuracio;
     private ArrayList<Direction> xMejor;
     private int vMejor;
+    private LabyrinthRenderer renderer;
 
     public BacktrackingLab() {
         configuracio = new ArrayList<Direction>();
@@ -24,6 +27,7 @@ public class BacktrackingLab implements LabyrinthSolver {
     @Override
     public List<Direction> solve(Cell[][] arg0, LabyrinthRenderer arg1) {
         matriuCells = arg0;
+        renderer = arg1;
 
         long start = System.nanoTime(); // Inicia el cronometre
         backtracking(configuracio, 0);
@@ -41,7 +45,7 @@ public class BacktrackingLab implements LabyrinthSolver {
         configuracio = preparaRecorridoNivel(configuracio, k);
         while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            // renderer.render(matriuCells, configuracio.subList(0, k), 10);
+            // renderer.render(matriuCells, configuracio.subList(0, k), 50);
             switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {
