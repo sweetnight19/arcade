@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+import LabyrinthSolver.BacktrackingLab;
+import LabyrinthSolver.BacktrackingWithOptLab;
+import WordSolver.WordSearch;
 import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
 import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
@@ -8,7 +11,7 @@ import edu.salleurl.arcade.words.model.WordsSolver;
 public class Menu {
 
     final int MIN = 4;
-    final int SIZE = 85;
+    final int SIZE = 50;
 
     public void show() {
 
@@ -66,13 +69,13 @@ public class Menu {
 
         if (backOption == 1) {
             // Backtracking
-            Backtracking laberinto = new Backtracking();
+            BacktrackingLab laberinto = new BacktrackingLab();
             WordSearch palabras = new WordSearch();
             launch(laberinto, palabras);
 
         } else if (backOption == 2) {
             // Backtracking con poda
-            BacktrackingWithOpt laberinto = new BacktrackingWithOpt();
+            BacktrackingWithOptLab laberinto = new BacktrackingWithOptLab();
             WordSearch palabras = new WordSearch();
             launch(laberinto, palabras);
         }

@@ -1,3 +1,5 @@
+package WordSolver;
+
 import edu.salleurl.arcade.words.controller.WordsRenderer;
 import edu.salleurl.arcade.words.model.WordsSolver;
 

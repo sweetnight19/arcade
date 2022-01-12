@@ -1,3 +1,5 @@
+package LabyrinthSolver;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,14 +8,14 @@ import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
 import edu.salleurl.arcade.labyrinth.model.enums.Cell;
 import edu.salleurl.arcade.labyrinth.model.enums.Direction;
 
-public class Backtracking implements LabyrinthSolver {
+public class BacktrackingLab implements LabyrinthSolver {
 
     private Cell[][] matriuCells;
     private ArrayList<Direction> configuracio;
     private ArrayList<Direction> xMejor;
     private int vMejor;
 
-    public Backtracking() {
+    public BacktrackingLab() {
         configuracio = new ArrayList<Direction>();
         xMejor = new ArrayList<Direction>();
         vMejor = 0;
