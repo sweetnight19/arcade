@@ -1,5 +1,7 @@
 package WordSolver;
 
+import java.util.Scanner;
+
 import edu.salleurl.arcade.words.controller.WordsRenderer;
 import edu.salleurl.arcade.words.model.WordsSolver;
 
@@ -8,10 +10,12 @@ public class WordSearch implements WordsSolver {
     private char[][] matriuCells;
     private int[] configuracio;
     private String referent;
+    private int algoritmo;
 
     // constructor
     public WordSearch() {
         configuracio = new int[4];
+        algoritmo = 0;
     }
 
     @Override
@@ -19,60 +23,60 @@ public class WordSearch implements WordsSolver {
         matriuCells = arg0;
         referent = arg1;
 
+        chooseAlgorithm();
         long start = System.nanoTime(); // Inicia el cronometre
         greedy();
         long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-        System.out.println("Ha acabat el Greedy amb " + elapsedTime / 1000000 + " milisegons");
+        System.out.println("Ha acabat el Greedy amb " + elapsedTime / 1000 + " microsegons");
 
-        // printem per pantalla el resultat
+        // mostramos por pantall el resultado
         arg2.render(arg0, referent, configuracio);
         return configuracio;
+    }
+
+    private void chooseAlgorithm() {
+        while (algoritmo < 1 || algoritmo > 2) {
+            System.out.println("Escoge el tipo de algorismo que quieres utilizar:");
+            System.out.println("1. Heuristica rapida");
+            System.out.println("2. Heuristica lenta");
+            Scanner sc = new Scanner(System.in);
+            algoritmo = sc.nextInt();
+
+            if (algoritmo < 1 || algoritmo > 2) {
+                System.out.println("Has de seleccionar una opción correcta entre 1 y 2");
+            }
+
+        }
     }
 
     private void greedy() {
         boolean encontrado = false;
 
-        configuracio[0] = 0;
-        configuracio[1] = 0;
-        configuracio[2] = 0;
-        configuracio[3] = 0;
-
-        // System.out.println("x:1 y:1 -> " + matriuCells[1][1]);
-        // System.out.println("x:2 y:1 -> " + matriuCells[2][1]);
-        // System.out.println("x:3 y:1 -> " + matriuCells[3][1]);
-        System.out.println("referent.length: " + referent.length());
+        for (int i = 0; i < configuracio.length; i++) {
+            configuracio[i] = 0;
+        }
 
         for (int y = 0; y < matriuCells.length && !encontrado; y++) {
             for (int x = 0; x < matriuCells.length && !encontrado; x++) {
-                // System.out.println("x:" + x + " y:" + y + " -> " + matriuCells[y][x]);
-
                 if (matriuCells[y][x] == referent.charAt(0)) {
                     if (y + referent.length() - 1 < matriuCells.length) { // Abajo
-                        if (matriuCells[y + 1][x] == referent.charAt(1)
-                                && matriuCells[y + referent.length() - 2][x] == referent
-                                        .charAt(referent.length() - 2)
-                                && matriuCells[y + referent.length() - 1][x] == referent
-                                        .charAt(referent.length() - 1)) {
+                        if (heuristica(x, y, 1)) {
                             configuracio[0] = y;
                             configuracio[1] = x;
                             configuracio[2] = y + referent.length() - 1;
                             configuracio[3] = x;
-                            System.out.println("Abajo");
+                            // System.out.println("Abajo");
                             encontrado = true;
                             break;
                         }
                     }
                     if (x + referent.length() - 1 < matriuCells.length) { // Derecha
-                        if (matriuCells[y][x + 1] == referent.charAt(1)
-                                && matriuCells[y][x + referent.length() - 2] == referent
-                                        .charAt(referent.length() - 2)
-                                && matriuCells[y][x + referent.length() - 1] == referent
-                                        .charAt(referent.length() - 1)) {
+                        if (heuristica(x, y, 2)) {
                             configuracio[0] = y;
                             configuracio[1] = x;
                             configuracio[2] = y;
                             configuracio[3] = x + referent.length() - 1;
-                            System.out.println("Derecha");
+                            // System.out.println("Derecha");
                             encontrado = true;
                             break;
                         }
@@ -83,9 +87,55 @@ public class WordSearch implements WordsSolver {
 
         }
         if (encontrado) {
-            System.out.println("S'ha trobat la paraula");
+            System.out.println("Se ha encontrdo la palabra");
         } else {
-            System.out.println("No s'ha trobat la paraula");
+            System.out.println("No se ha encontrado la palabra");
         }
+    }
+
+    private boolean heuristica(int x, int y, int direccion) {
+        switch (algoritmo) {
+            case 1: // Heuristica rapida
+                switch (direccion) {
+                    case 1: // Abajo
+                        if (matriuCells[y + referent.length() - 1][x] == referent
+                                .charAt(referent.length() - 1)) {
+                            return true;
+                        }
+                        break;
+                    case 2: // Derecha
+                        if (matriuCells[y][x + referent.length() - 1] == referent
+                                .charAt(referent.length() - 1)) {
+                            return true;
+                        }
+                        break;
+                }
+                break;
+
+            case 2: // Heuristica lenta
+                switch (direccion) {
+                    case 1: // Abajo
+                        if (matriuCells[y + 1][x] == referent.charAt(1)
+                                && matriuCells[y + referent.length() - 2][x] == referent
+                                        .charAt(referent.length() - 2)
+                                && matriuCells[y + referent.length() - 1][x] == referent
+                                        .charAt(referent.length() - 1)) {
+                            return true;
+                        }
+                        break;
+                    case 2: // Derecha
+                        if (matriuCells[y][x + 1] == referent.charAt(1)
+                                && matriuCells[y][x + referent.length() - 2] == referent
+                                        .charAt(referent.length() - 2)
+                                && matriuCells[y][x + referent.length() - 1] == referent
+                                        .charAt(referent.length() - 1)) {
+                            return true;
+                        }
+                        break;
+                }
+                break;
+        }
+
+        return false;
     }
 }

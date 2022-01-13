@@ -37,12 +37,12 @@ public class Labyrinth implements LabyrinthSolver {
             start = System.nanoTime(); // Inicia el cuentareloj
             backtracking(configuracio, 0);
             elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
-            System.out.println("Ha acabat el backtracking: " + elapsedTime / 1000000 + " milisegons");
+            System.out.println("Ha terminado el backtracking: " + elapsedTime / 1000000 + " milisegundos");
         } else { // Backtracking con poda
             start = System.nanoTime(); // Inicia el cuentareloj
             backtrackingWithOpt(configuracio, 0);
             elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
-            System.out.println("Ha acabat el backtracking amb poda: " + elapsedTime / 1000000 + " milisegons");
+            System.out.println("Ha terminado el backtracking con poda: " + elapsedTime / 1000000 + " milisegundos");
         }
 
         // printem per pantalla el resultat
@@ -56,7 +56,7 @@ public class Labyrinth implements LabyrinthSolver {
         configuracio = preparaRecorridoNivel(configuracio, k);
         while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            renderer.render(matriuCells, configuracio.subList(0, k), 10);
+            // renderer.render(matriuCells, configuracio.subList(0, k), 10);
             switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {
