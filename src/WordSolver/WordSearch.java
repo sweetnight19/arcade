@@ -41,26 +41,26 @@ public class WordSearch implements WordsSolver {
         for (int x = 0; x < matriuCells.length && !trobat; x++) {
             for (int y = 0; y < matriuCells.length && !trobat; y++) {
                 contador = 0;
-                if (matriuCells[x][y] == referent.charAt(contador)) {
+                if (matriuCells[y][x] == referent.charAt(contador)) {
                     configuracio[contador] = y;
                     contador++;
                     configuracio[contador] = x;
                     contador++;
-                    if (matriuCells[x + 1][y] == referent.charAt(contador) && x + 5 <= matriuCells.length) { // Derecha
+                    if (matriuCells[y][x + 1] == referent.charAt(contador) && x + 5 <= matriuCells.length) { // Derecha
                         configuracio[contador] = y + 1;
                         contador++;
                         configuracio[contador] = x;
                         System.out.println("Derecha");
                         trobat = true;
                     }
-                    if (matriuCells[x][y + 1] == referent.charAt(contador) && y + 5 <= matriuCells.length) { // Abajo
+                    if (matriuCells[y + 1][x] == referent.charAt(contador) && y + 5 <= matriuCells.length) { // Abajo
                         configuracio[contador] = y + 1;
                         contador++;
                         configuracio[contador] = x;
                         System.out.println("Abajo");
                         trobat = true;
                     }
-                    if (matriuCells[x + 1][y + 1] == referent.charAt(contador) && y + 5 <= matriuCells.length
+                    if (matriuCells[y + 1][x + 1] == referent.charAt(contador) && y + 5 <= matriuCells.length
                             && x + 5 <= matriuCells.length) { // Diagonal Derecha
                         configuracio[contador] = x + 1;
                         contador++;
@@ -72,6 +72,11 @@ public class WordSearch implements WordsSolver {
                 }
 
             }
+        }
+        if (trobat) {
+            System.out.println("S'ha trobat la paraula");
+        } else {
+            System.out.println("No s'ha trobat la paraula");
         }
     }
 }

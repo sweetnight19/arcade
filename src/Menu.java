@@ -8,7 +8,7 @@ import edu.salleurl.arcade.ArcadeBuilder;
 public class Menu {
 
     final int MIN = 4;
-    final int SIZE = 30;
+    final int SIZE = 25;
 
     public void show() {
 

@@ -24,7 +24,6 @@ public class Labyrinth implements LabyrinthSolver {
         xMejor = new ArrayList<Direction>();
         vMejor = 0;
         this.algoritmo = algoritmo;
-        this.algoritmo = algoritmo;
     }
 
     @Override
@@ -35,11 +34,13 @@ public class Labyrinth implements LabyrinthSolver {
         long elapsedTime;
 
         if (algoritmo == 1) { // Backtracking
+            System.out.println("Backtracking con poda");
             start = System.nanoTime(); // Inicia el cuentareloj
             backtracking(configuracio, 0);
             elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
             System.out.println("Ha acabat el backtracking: " + elapsedTime / 1000000 + " milisegons");
         } else { // Backtracking con poda
+            System.out.println("Backtracking con poda");
             start = System.nanoTime(); // Inicia el cuentareloj
             backtrackingWithOpt(configuracio, 0);
             elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
@@ -57,7 +58,7 @@ public class Labyrinth implements LabyrinthSolver {
         configuracio = preparaRecorridoNivel(configuracio, k);
         while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            // renderer.render(matriuCells, configuracio.subList(0, k), 100);
+            renderer.render(matriuCells, configuracio.subList(0, k), 10);
             switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {
@@ -81,7 +82,7 @@ public class Labyrinth implements LabyrinthSolver {
         configuracio = preparaRecorridoNivel(configuracio, k);
         while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            // renderer.render(matriuCells, configuracio.subList(0, k), 100);
+            // renderer.render(matriuCells, configuracio.subList(0, k), 30);
             switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {
@@ -92,7 +93,7 @@ public class Labyrinth implements LabyrinthSolver {
                     if (buena(configuracio, k, numDecisiones)) {
                         if (k < vMejor || vMejor == 0) { // Si puede ser mejor que el anterior o no se ha calculado
                                                          // ninguna solucion
-                            backtracking(configuracio, k + 1);
+                            backtrackingWithOpt(configuracio, k + 1);
                         }
                     }
                     break;
