@@ -30,50 +30,59 @@ public class WordSearch implements WordsSolver {
     }
 
     private void greedy() {
-        int contador = 0;
-        boolean trobat = false;
+        boolean encontrado = false;
 
         configuracio[0] = 0;
         configuracio[1] = 0;
         configuracio[2] = 0;
         configuracio[3] = 0;
 
-        for (int x = 0; x < matriuCells.length && !trobat; x++) {
-            for (int y = 0; y < matriuCells.length && !trobat; y++) {
-                contador = 0;
-                if (matriuCells[y][x] == referent.charAt(contador)) {
-                    configuracio[contador] = y;
-                    contador++;
-                    configuracio[contador] = x;
-                    contador++;
-                    if (matriuCells[y][x + 1] == referent.charAt(contador) && x + 5 <= matriuCells.length) { // Derecha
-                        configuracio[contador] = y + 1;
-                        contador++;
-                        configuracio[contador] = x;
-                        System.out.println("Derecha");
-                        trobat = true;
-                    }
-                    if (matriuCells[y + 1][x] == referent.charAt(contador) && y + 5 <= matriuCells.length) { // Abajo
-                        configuracio[contador] = y + 1;
-                        contador++;
-                        configuracio[contador] = x;
-                        System.out.println("Abajo");
-                        trobat = true;
-                    }
-                    if (matriuCells[y + 1][x + 1] == referent.charAt(contador) && y + 5 <= matriuCells.length
-                            && x + 5 <= matriuCells.length) { // Diagonal Derecha
-                        configuracio[contador] = x + 1;
-                        contador++;
-                        configuracio[contador] = y;
-                        System.out.println("Diagonal Derecha");
-                        trobat = true;
-                    }
+        // System.out.println("x:1 y:1 -> " + matriuCells[1][1]);
+        // System.out.println("x:2 y:1 -> " + matriuCells[2][1]);
+        // System.out.println("x:3 y:1 -> " + matriuCells[3][1]);
+        System.out.println("referent.length: " + referent.length());
 
+        for (int y = 0; y < matriuCells.length && !encontrado; y++) {
+            for (int x = 0; x < matriuCells.length && !encontrado; x++) {
+                // System.out.println("x:" + x + " y:" + y + " -> " + matriuCells[y][x]);
+
+                if (matriuCells[y][x] == referent.charAt(0)) {
+                    if (y + referent.length() - 1 < matriuCells.length) { // Abajo
+                        if (matriuCells[y + 1][x] == referent.charAt(1)
+                                && matriuCells[y + referent.length() - 2][x] == referent
+                                        .charAt(referent.length() - 2)
+                                && matriuCells[y + referent.length() - 1][x] == referent
+                                        .charAt(referent.length() - 1)) {
+                            configuracio[0] = y;
+                            configuracio[1] = x;
+                            configuracio[2] = y + referent.length() - 1;
+                            configuracio[3] = x;
+                            System.out.println("Abajo");
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                    if (x + referent.length() - 1 < matriuCells.length) { // Derecha
+                        if (matriuCells[y][x + 1] == referent.charAt(1)
+                                && matriuCells[y][x + referent.length() - 2] == referent
+                                        .charAt(referent.length() - 2)
+                                && matriuCells[y][x + referent.length() - 1] == referent
+                                        .charAt(referent.length() - 1)) {
+                            configuracio[0] = y;
+                            configuracio[1] = x;
+                            configuracio[2] = y;
+                            configuracio[3] = x + referent.length() - 1;
+                            System.out.println("Derecha");
+                            encontrado = true;
+                            break;
+                        }
+                    }
                 }
 
             }
+
         }
-        if (trobat) {
+        if (encontrado) {
             System.out.println("S'ha trobat la paraula");
         } else {
             System.out.println("No s'ha trobat la paraula");

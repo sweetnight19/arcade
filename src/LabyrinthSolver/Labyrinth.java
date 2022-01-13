@@ -34,17 +34,15 @@ public class Labyrinth implements LabyrinthSolver {
         long elapsedTime;
 
         if (algoritmo == 1) { // Backtracking
-            System.out.println("Backtracking con poda");
             start = System.nanoTime(); // Inicia el cuentareloj
             backtracking(configuracio, 0);
             elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
             System.out.println("Ha acabat el backtracking: " + elapsedTime / 1000000 + " milisegons");
         } else { // Backtracking con poda
-            System.out.println("Backtracking con poda");
             start = System.nanoTime(); // Inicia el cuentareloj
             backtrackingWithOpt(configuracio, 0);
             elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
-            System.out.println("Ha acabat el backtracking amb poda:" + elapsedTime / 1000000 + " milisegons");
+            System.out.println("Ha acabat el backtracking amb poda: " + elapsedTime / 1000000 + " milisegons");
         }
 
         // printem per pantalla el resultat
