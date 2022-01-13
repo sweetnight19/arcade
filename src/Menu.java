@@ -1,17 +1,14 @@
 import java.util.Scanner;
 
-import LabyrinthSolver.BacktrackingLab;
-import LabyrinthSolver.BacktrackingWithOptLab;
+import LabyrinthSolver.Labyrinth;
 import WordSolver.WordSearch;
 import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
-import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
-import edu.salleurl.arcade.words.model.WordsSolver;
 
 public class Menu {
 
     final int MIN = 4;
-    final int SIZE = 50;
+    final int SIZE = 30;
 
     public void show() {
 
@@ -27,16 +24,23 @@ public class Menu {
             switch (option) {
                 case 1:
                     // Arcade de Laberintos
-
                     while (backOption == 0) {
                         System.out.println("\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
+                        System.out.println("\t3. Branch and Bound");
+                        System.out.print("\n\tElige una opción: ");
                         backOption = sc.nextInt();
                     }
-
                     break;
                 case 2:
                     // Arcade de Palabras
+                    while (backOption == 0) {
+                        System.out.println("\t1. Backtracking");
+                        System.out.println("\t2. Backtracking con poda");
+                        System.out.println("\t3. Branch and Bound");
+                        System.out.print("\n\tElige una opción: ");
+                        backOption = sc.nextInt();
+                    }
                     break;
                 case 3:
                     // Iniciar
@@ -71,22 +75,9 @@ public class Menu {
     }
 
     private void start(int backOption) {
+        Labyrinth laberinto = new Labyrinth(backOption);
+        WordSearch palabras = new WordSearch();
 
-        if (backOption == 1) {
-            // Backtracking
-            BacktrackingLab laberinto = new BacktrackingLab();
-            WordSearch palabras = new WordSearch();
-            launch(laberinto, palabras);
-
-        } else if (backOption == 2) {
-            // Backtracking con poda
-            BacktrackingWithOptLab laberinto = new BacktrackingWithOptLab();
-            WordSearch palabras = new WordSearch();
-            launch(laberinto, palabras);
-        }
-    }
-
-    private void launch(LabyrinthSolver laberinto, WordsSolver palabras) {
         Arcade arcade = new ArcadeBuilder()
                 .setLabyrinthColumns(SIZE)
                 .setLabyrinthRows(SIZE)
@@ -94,9 +85,7 @@ public class Menu {
                 .setWordsRows(SIZE)
                 // Opcional, per fixar un input en comptes d'obtenir-ne un d'aleatori
                 .setSeed(42)
-                // DemoLabyrinthSolver implementa LabyrinthSolver
                 .setLabyrinthSolver(laberinto)
-                // DemoWordsSolver implementa WordsSolver
                 .setWordsSolver(palabras)
                 .build();
         arcade.run();

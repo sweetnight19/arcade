@@ -3,32 +3,48 @@ package LabyrinthSolver;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Renderer;
+
 import edu.salleurl.arcade.labyrinth.controller.LabyrinthRenderer;
 import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
 import edu.salleurl.arcade.labyrinth.model.enums.Cell;
 import edu.salleurl.arcade.labyrinth.model.enums.Direction;
 
-public class BacktrackingWithOptLab implements LabyrinthSolver {
+public class Labyrinth implements LabyrinthSolver {
 
     private Cell[][] matriuCells;
     private ArrayList<Direction> configuracio;
     private ArrayList<Direction> xMejor;
     private int vMejor;
+    private LabyrinthRenderer renderer;
+    private int algoritmo;
 
-    public BacktrackingWithOptLab() {
+    public Labyrinth(int algoritmo) {
         configuracio = new ArrayList<Direction>();
         xMejor = new ArrayList<Direction>();
         vMejor = 0;
+        this.algoritmo = algoritmo;
+        this.algoritmo = algoritmo;
     }
 
     @Override
     public List<Direction> solve(Cell[][] arg0, LabyrinthRenderer arg1) {
         matriuCells = arg0;
+        renderer = arg1;
+        long start;
+        long elapsedTime;
 
-        long start = System.nanoTime(); // Inicia el cronometre
-        backtracking(configuracio, 0);
-        long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-        System.out.println("Ha acabat el backtracking amb poda amb " + elapsedTime / 1000000 + " milisegons");
+        if (algoritmo == 1) { // Backtracking
+            start = System.nanoTime(); // Inicia el cuentareloj
+            backtracking(configuracio, 0);
+            elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
+            System.out.println("Ha acabat el backtracking: " + elapsedTime / 1000000 + " milisegons");
+        } else { // Backtracking con poda
+            start = System.nanoTime(); // Inicia el cuentareloj
+            backtrackingWithOpt(configuracio, 0);
+            elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
+            System.out.println("Ha acabat el backtracking amb poda:" + elapsedTime / 1000000 + " milisegons");
+        }
 
         // printem per pantalla el resultat
         arg1.render(arg0, xMejor.subList(0, vMejor));
@@ -41,7 +57,31 @@ public class BacktrackingWithOptLab implements LabyrinthSolver {
         configuracio = preparaRecorridoNivel(configuracio, k);
         while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            // renderer.render(matriuCells, configuracio.subList(0, k), 10);
+            // renderer.render(matriuCells, configuracio.subList(0, k), 100);
+            switch (mirarPosicio(configuracio, k)) {
+                case EXIT:
+                    if (buena(configuracio, k, numDecisiones)) {
+                        tratarSolucion(configuracio, k);
+                    }
+                    break;
+                default:
+                    if (buena(configuracio, k, numDecisiones)) {
+                        backtracking(configuracio, k + 1);
+                    }
+                    break;
+            }
+            numDecisiones++;
+        }
+
+    }
+
+    private void backtrackingWithOpt(ArrayList<Direction> configuracio, int k) {
+        int numDecisiones = 1;
+
+        configuracio = preparaRecorridoNivel(configuracio, k);
+        while (haySucesor(configuracio, k, numDecisiones)) {
+            configuracio = siguienteHermano(configuracio, k, numDecisiones);
+            // renderer.render(matriuCells, configuracio.subList(0, k), 100);
             switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {
