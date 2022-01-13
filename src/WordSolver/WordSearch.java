@@ -11,11 +11,18 @@ public class WordSearch implements WordsSolver {
     private int[] configuracio;
     private String referent;
     private int algoritmo;
+    private int heuristica;
 
-    // constructor
-    public WordSearch() {
+    /**
+     * Constructor
+     *
+     * @param algoritmo
+     */
+    public WordSearch(int algoritmo) {
         configuracio = new int[4];
-        algoritmo = 0;
+        this.algoritmo = algoritmo;
+        heuristica = 0;
+
     }
 
     @Override
@@ -23,32 +30,51 @@ public class WordSearch implements WordsSolver {
         matriuCells = arg0;
         referent = arg1;
 
-        chooseAlgorithm();
-        long start = System.nanoTime(); // Inicia el cronometre
-        greedy();
-        long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-        System.out.println("Ha acabat el Greedy amb " + elapsedTime / 1000 + " microsegons");
+        switch (algoritmo) {
+            case 1: // backtracking
 
-        // mostramos por pantall el resultado
-        arg2.render(arg0, referent, configuracio);
+                break;
+            case 2: // backtracking con poda
+
+                break;
+            case 3: // Greedy
+                chooseAlgorithm();
+                long start = System.nanoTime(); // Inicia el cronometre
+                greedy();
+                long elapsedTime = System.nanoTime() - start; // Acaba el cronometre
+                System.out.println("Ha acabat el Greedy amb " + elapsedTime / 1000 + " microsegons");
+
+                // mostramos por pantall el resultado
+                arg2.render(arg0, referent, configuracio);
+                break;
+
+        }
+
         return configuracio;
     }
 
+    /**
+     * Este metodo se encarga de elegir el algoritmo que se va a utilizar en el
+     * greedy
+     */
     private void chooseAlgorithm() {
-        while (algoritmo < 1 || algoritmo > 2) {
+        while (heuristica < 1 || heuristica > 2) {
             System.out.println("Escoge el tipo de algorismo que quieres utilizar:");
             System.out.println("1. Heuristica rapida");
             System.out.println("2. Heuristica lenta");
             Scanner sc = new Scanner(System.in);
-            algoritmo = sc.nextInt();
+            heuristica = sc.nextInt();
 
-            if (algoritmo < 1 || algoritmo > 2) {
+            if (heuristica < 1 || heuristica > 2) {
                 System.out.println("Has de seleccionar una opción correcta entre 1 y 2");
             }
 
         }
     }
 
+    /**
+     * Este metodo implementa el algoritmo greedy
+     */
     private void greedy() {
         boolean encontrado = false;
 
@@ -102,6 +128,15 @@ public class WordSearch implements WordsSolver {
         }
     }
 
+    /**
+     * Este metodo se encarga de comprobar si la palabra existe en la
+     * posicion indicada
+     *
+     * @param x
+     * @param y
+     * @param direccion
+     * @return
+     */
     private boolean heuristica(int x, int y, int direccion) {
         switch (algoritmo) {
             case 1: // Heuristica rapida

@@ -10,6 +10,9 @@ public class App {
         menu.show();
     }
 
+    /**
+     * Prints the boot message
+     */
     private static void printBootMessage() throws IOException {
         String asciiArt1 = FigletFont.convertOneLine("ARCADE");
         System.out.println(asciiArt1);

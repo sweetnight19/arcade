@@ -19,6 +19,11 @@ public class Labyrinth implements LabyrinthSolver {
     private LabyrinthRenderer renderer;
     private int algoritmo;
 
+    /**
+     * Constructor
+     *
+     * @param algoritmo
+     */
     public Labyrinth(int algoritmo) {
         configuracio = new ArrayList<Direction>();
         xMejor = new ArrayList<Direction>();
@@ -33,16 +38,26 @@ public class Labyrinth implements LabyrinthSolver {
         long start;
         long elapsedTime;
 
-        if (algoritmo == 1) { // Backtracking
-            start = System.nanoTime(); // Inicia el cuentareloj
-            backtracking(configuracio, 0);
-            elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
-            System.out.println("Ha terminado el backtracking: " + elapsedTime / 1000000 + " milisegundos");
-        } else { // Backtracking con poda
-            start = System.nanoTime(); // Inicia el cuentareloj
-            backtrackingWithOpt(configuracio, 0);
-            elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
-            System.out.println("Ha terminado el backtracking con poda: " + elapsedTime / 1000000 + " milisegundos");
+        switch (algoritmo) {
+            case 1: // backtracking
+                start = System.nanoTime(); // Inicia el cuentareloj
+                backtracking(configuracio, 0);
+                elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
+                System.out.println("Ha terminado el backtracking: " + elapsedTime / 1000000 + " milisegundos");
+                break;
+            case 2: // backtracking con poda
+                start = System.nanoTime(); // Inicia el cuentareloj
+                backtrackingWithOpt(configuracio, 0);
+                elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
+                System.out.println("Ha terminado el backtracking con poda: " + elapsedTime / 1000000 + " milisegundos");
+                break;
+            case 3: // Branch and Bound
+                start = System.nanoTime(); // Inicia el cronometre
+                branchAndBound();
+                elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
+                System.out.println("Ha terminado el Branch and Bound: " + elapsedTime / 1000000 + " milisegundos");
+                break;
+
         }
 
         // printem per pantalla el resultat
@@ -50,6 +65,22 @@ public class Labyrinth implements LabyrinthSolver {
         return xMejor.subList(0, vMejor);
     }
 
+    /**
+     * Metode que implementa el branch and bound
+     * 
+     * @param configuracio
+     * @param v
+     */
+    private void branchAndBound() {
+
+    }
+
+    /**
+     * Metodo que implementa el backtracking
+     * 
+     * @param configuracio
+     * @param k
+     */
     private void backtracking(ArrayList<Direction> configuracio, int k) {
         int numDecisiones = 1;
 
@@ -74,6 +105,12 @@ public class Labyrinth implements LabyrinthSolver {
 
     }
 
+    /**
+     * Metodo que implementa el backtracking con poda
+     * 
+     * @param configuracio
+     * @param k
+     */
     private void backtrackingWithOpt(ArrayList<Direction> configuracio, int k) {
         int numDecisiones = 1;
 
@@ -101,6 +138,13 @@ public class Labyrinth implements LabyrinthSolver {
 
     }
 
+    /**
+     * Metodo que devuelve que hay en la posicion actual
+     * 
+     * @param configuracio
+     * @param k
+     * @return Cell
+     */
     private Cell mirarPosicio(ArrayList<Direction> configuracio, int k) {
         int x = 1;
         int y = 1;
@@ -126,15 +170,38 @@ public class Labyrinth implements LabyrinthSolver {
         return matriuCells[y][x];
     }
 
+    /**
+     * Metodo que inicializa el recorrido del nivel
+     * 
+     * @param configuracio
+     * @param k
+     * @return ArrayList<Direction>
+     */
     private ArrayList<Direction> preparaRecorridoNivel(ArrayList<Direction> configuracio, int k) {
         configuracio.add(Direction.RIGHT);
         return configuracio;
     }
 
-    private boolean haySucesor(ArrayList<Direction> configuracio2, int k, int numDecisiones) {
+    /**
+     * Metodo que devuelve si hay decisiones que tomar en ese nivel
+     * 
+     * @param configuracio
+     * @param k
+     * @param numDecisiones
+     * @return boolean
+     */
+    private boolean haySucesor(ArrayList<Direction> configuracio, int k, int numDecisiones) {
         return numDecisiones <= 4;
     }
 
+    /**
+     * Metodo que devuelve el siguiente hermano
+     * 
+     * @param configuracio
+     * @param k
+     * @param numDecisiones
+     * @return ArrayList<Direction>
+     */
     private ArrayList<Direction> siguienteHermano(ArrayList<Direction> configuracio, int k, int numDecisiones) {
         switch (numDecisiones) {
             case 1:
@@ -153,6 +220,14 @@ public class Labyrinth implements LabyrinthSolver {
         return configuracio;
     }
 
+    /**
+     * Metodo que devuelve si la configuracion es buena
+     * 
+     * @param configuracio
+     * @param k
+     * @param numDecisiones
+     * @return boolean
+     */
     private boolean buena(ArrayList<Direction> configuracion, int k, int numDecisiones) {
         int x = 1, x_calculada = 1;
         int y = 1, y_calculada = 1;
@@ -209,6 +284,12 @@ public class Labyrinth implements LabyrinthSolver {
         return true;
     }
 
+    /**
+     * Metodo que trata la solucion
+     * 
+     * @param configuracio
+     * @param k
+     */
     private void tratarSolucion(ArrayList<Direction> configuracio, int k) {
 
         if (k < vMejor || vMejor == 0) {

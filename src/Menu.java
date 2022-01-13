@@ -10,7 +10,7 @@ public class Menu {
 
     public void show() {
 
-        int option = 0, backOption = 0;
+        int option = 0, labOption = 0, wordOption = 0;
         Scanner sc = new Scanner(System.in);
 
         while (option != 4) {
@@ -22,30 +22,35 @@ public class Menu {
             switch (option) {
                 case 1:
                     // Arcade de Laberintos
-                    while (backOption == 0) {
+                    while (labOption == 0) {
                         System.out.println("\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
                         System.out.println("\t3. Branch and Bound");
                         System.out.print("\n\tElige una opción: ");
-                        backOption = sc.nextInt();
+                        labOption = sc.nextInt();
                     }
                     break;
                 case 2:
                     // Arcade de Palabras
-                    while (backOption == 0) {
+                    while (labOption == 0) {
                         System.out.println("\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
-                        System.out.println("\t3. Branch and Bound");
+                        System.out.println("\t3. Greedy");
                         System.out.print("\n\tElige una opción: ");
-                        backOption = sc.nextInt();
+                        wordOption = sc.nextInt();
                     }
                     break;
                 case 3:
                     // Iniciar
-                    if (backOption == 0) {
+                    if (labOption == 0) {
                         System.out.println("Te falta elegir un algoritmo de Laberinto");
                     } else {
-                        start(backOption);
+                        if (wordOption == 0) {
+                            System.out.println("Te falta elegir un algoritmo de Palabras");
+                        } else {
+
+                            start(labOption, wordOption);
+                        }
 
                     }
                     break;
@@ -62,6 +67,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Método que muestra el menú
+     */
     private void printMenu() {
         System.out.println();
         System.out.println("Indicar las opciones de Arcade:\n");
@@ -72,9 +80,15 @@ public class Menu {
         System.out.print("Ingrese una opción: ");
     }
 
-    private void start(int backOption) {
-        Labyrinth laberinto = new Labyrinth(backOption);
-        WordSearch palabras = new WordSearch();
+    /**
+     * Inicia el Arcade
+     *
+     * @param labOption
+     * @param wordOption
+     */
+    private void start(int labOption, int wordOption) {
+        Labyrinth laberinto = new Labyrinth(labOption);
+        WordSearch palabras = new WordSearch(wordOption);
 
         Arcade arcade = new ArcadeBuilder()
                 .setLabyrinthColumns(SIZE)
