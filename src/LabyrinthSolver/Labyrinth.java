@@ -59,7 +59,7 @@ public class Labyrinth implements LabyrinthSolver {
                 start = System.nanoTime(); // Inicia el cronometre
                 branchAndBound();
                 elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-                System.out.println("Ha acabat el Branch and Bound amb " + elapsedTime / 1000000 + " milisegundos");
+                System.out.println("Ha terminado el Branch & Bound con " + elapsedTime / 1000000 + " milisegundos");
 
                 // Mostramos por pantalla el resultado
                 arg1.render(arg0, xMejor);
@@ -87,7 +87,6 @@ public class Labyrinth implements LabyrinthSolver {
                 if (solucion(hijos[i])) {
                     if (buenabb(hijos[i].getConfiguracio(), hijos[i].getK(), numDecisiones)) {
                         if (valor(hijos[i]) < vMejor) {
-                            System.out.println("Nueva solucion encontrada: " + valor(hijos[i]));
                             vMejor = valor(hijos[i]);
                             xMejor = new ArrayList<Direction>(hijos[i].getConfiguracio());
                         }

@@ -50,7 +50,7 @@ public class WordSearch implements WordsSolver {
     }
 
     private void chooseAlgorithm() {
-        while (algoritmo < 1 || algoritmo > 2) {
+        while (algoritmo < 1 || algoritmo > 3) {
             System.out.println("Escoge el tipo de algorismo que quieres utilizar:");
             System.out.println("\n\t1. Heuristica rapida");
             System.out.println("\t2. Heuristica lenta");
@@ -59,8 +59,8 @@ public class WordSearch implements WordsSolver {
             Scanner sc = new Scanner(System.in);
             algoritmo = sc.nextInt();
 
-            if (algoritmo < 1 || algoritmo > 2) {
-                System.out.println("Has de seleccionar una opción correcta entre 1 y 2");
+            if (algoritmo < 1 || algoritmo > 3) {
+                System.out.println("Has de seleccionar una opción correcta entre 1 y 3");
             }
         }
     }
@@ -75,13 +75,11 @@ public class WordSearch implements WordsSolver {
         for (int y = 0; y < matriuCells.length && !encontrado; y++) {
             for (int x = 0; x < matriuCells.length && !encontrado; x++) {
 
-                /*
-                 * configuracio[0] = y;
-                 * configuracio[1] = x;
-                 * configuracio[2] = y;
-                 * configuracio[3] = x;
-                 * renderer.render(matriuCells, referent, configuracio, 100);
-                 */
+                configuracio[0] = y;
+                configuracio[1] = x;
+                configuracio[2] = y;
+                configuracio[3] = x;
+                renderer.render(matriuCells, referent, configuracio, 5);
 
                 if (matriuCells[y][x] == referent.charAt(0)) {
                     if (y + referent.length() - 1 < matriuCells.length) { // Abajo
@@ -181,6 +179,31 @@ public class WordSearch implements WordsSolver {
                             return true;
                         }
                         break;
+                }
+                break;
+            case 3:
+                switch (direccion) {
+                    case 1: // Abajo
+                        for (int i = 0; i < referent.length(); i++) {
+                            if (matriuCells[y + i][x] != referent.charAt(i)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    case 2: // Derecha
+                        for (int j = 0; j < referent.length(); j++) {
+                            if (matriuCells[y][x + j] != referent.charAt(j)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    case 3: // Diagonal
+                        for (int i = 0, j = 0; i < referent.length(); i++, j++) {
+                            if (matriuCells[y + i][x + j] != referent.charAt(i)) {
+                                return false;
+                            }
+                        }
+                        return true;
                 }
                 break;
         }
