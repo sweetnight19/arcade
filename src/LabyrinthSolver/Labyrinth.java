@@ -40,27 +40,32 @@ public class Labyrinth implements LabyrinthSolver {
                 backtracking(configuracio, 0);
                 elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
                 System.out.println("Ha terminado el backtracking: " + elapsedTime / 1000000 + " milisegundos");
-                break;
+
+                // Mostramos por pantalla el resultado
+                arg1.render(arg0, xMejor.subList(0, vMejor));
+                return xMejor.subList(0, vMejor);
+
             case 2: // Backtracking con poda
                 start = System.nanoTime(); // Inicia el cuentareloj
                 backtrackingWithOpt(configuracio, 0);
                 elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
                 System.out.println("Ha terminado el backtracking con poda: " + elapsedTime / 1000000 + " milisegundos");
-                break;
+
+                // Mostramos por pantalla el resultado
+                arg1.render(arg0, xMejor.subList(0, vMejor));
+                return xMejor.subList(0, vMejor);
+
             case 3: // Branch and Bound
                 start = System.nanoTime(); // Inicia el cronometre
                 branchAndBound();
                 elapsedTime = System.nanoTime() - start; // Acaba el cronometre
                 System.out.println("Ha acabat el Branch and Bound amb " + elapsedTime / 1000000 + " milisegundos");
-                break;
 
-            default:
-                break;
+                // Mostramos por pantalla el resultado
+                arg1.render(arg0, xMejor);
+                return xMejor;
         }
-
-        // Mostramos por pantalla el resultado
-        arg1.render(arg0, xMejor.subList(0, vMejor));
-        return xMejor.subList(0, vMejor);
+        return xMejor;
     }
 
     private void branchAndBound() {
@@ -78,13 +83,13 @@ public class Labyrinth implements LabyrinthSolver {
             hijos = expande(pq.poll());
             for (int i = 0; i < 4; i++) {
                 // renderer.render(matriuCells, hijos[i].getConfiguracio().subList(0,
-                // hijos[i].getK()), 200);
+                // hijos[i].getK()), 20);
                 if (solucion(hijos[i])) {
                     if (buenabb(hijos[i].getConfiguracio(), hijos[i].getK(), numDecisiones)) {
                         if (valor(hijos[i]) < vMejor) {
                             System.out.println("Nueva solucion encontrada: " + valor(hijos[i]));
                             vMejor = valor(hijos[i]);
-                            xMejor = hijos[i].getConfiguracio();
+                            xMejor = new ArrayList<Direction>(hijos[i].getConfiguracio());
                         }
                     }
                 } else {
@@ -93,7 +98,6 @@ public class Labyrinth implements LabyrinthSolver {
                             hijos[i].setValorEstimado(valorEstimado(hijos[i]));
                             pq.add(hijos[i]);
                         }
-
                     }
                 }
             }
