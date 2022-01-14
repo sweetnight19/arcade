@@ -91,6 +91,7 @@ public class WordSearch implements WordsSolver {
                             configuracio[1] = x;
                             configuracio[2] = y + referent.length() - 1;
                             configuracio[3] = x;
+                            // System.out.println("Abajo");
                             encontrado = true;
                             break;
                         }
@@ -101,17 +102,7 @@ public class WordSearch implements WordsSolver {
                             configuracio[1] = x;
                             configuracio[2] = y;
                             configuracio[3] = x + referent.length() - 1;
-                            encontrado = true;
-                            break;
-                        }
-                    }
-                    if (y + referent.length() - 1 < matriuCells.length
-                            && x + referent.length() - 1 < matriuCells.length) { // Diagonal
-                        if (heuristica(x, y, 3)) {
-                            configuracio[0] = y;
-                            configuracio[1] = x;
-                            configuracio[2] = y + referent.length() - 1;
-                            configuracio[3] = x + referent.length() - 1;
+                            // System.out.println("Derecha");
                             encontrado = true;
                             break;
                         }
@@ -153,12 +144,6 @@ public class WordSearch implements WordsSolver {
                             return true;
                         }
                         break;
-                    case 3: // Diagonal
-                        if (matriuCells[y + referent.length() - 1][x + referent.length() - 1] == referent
-                                .charAt(referent.length() - 1)) {
-                            return true;
-                        }
-                        break;
                 }
                 break;
 
@@ -178,15 +163,6 @@ public class WordSearch implements WordsSolver {
                                 && matriuCells[y][x + referent.length() - 2] == referent
                                         .charAt(referent.length() - 2)
                                 && matriuCells[y][x + referent.length() - 1] == referent
-                                        .charAt(referent.length() - 1)) {
-                            return true;
-                        }
-                        break;
-                    case 3: // Diagonal
-                        if (matriuCells[y + 1][x + 1] == referent.charAt(1)
-                                && matriuCells[y + referent.length() - 2][x + referent.length() - 2] == referent
-                                        .charAt(referent.length() - 2)
-                                && matriuCells[y + referent.length() - 1][x + referent.length() - 1] == referent
                                         .charAt(referent.length() - 1)) {
                             return true;
                         }
