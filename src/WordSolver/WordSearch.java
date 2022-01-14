@@ -11,31 +11,27 @@ public class WordSearch implements WordsSolver {
     private int[] configuracio;
     private String referent;
     private int algoritmo;
-    private int heuristica;
+    private int wordOption;
+    private WordsRenderer renderer;
 
-    /**
-     * Constructor
-     *
-     * @param algoritmo
-     */
-    public WordSearch(int algoritmo) {
+    // constructor
+    public WordSearch(int wordOption) {
         configuracio = new int[4];
-        this.algoritmo = algoritmo;
-        heuristica = 0;
-
+        algoritmo = 0;
+        this.wordOption = wordOption;
     }
 
     @Override
     public int[] solve(char[][] arg0, String arg1, WordsRenderer arg2) {
         matriuCells = arg0;
         referent = arg1;
+        renderer = arg2;
 
-        switch (algoritmo) {
-            case 1: // backtracking
+        switch (wordOption) {
+            case 1: // Backtracking
 
                 break;
-            case 2: // backtracking con poda
-
+            case 2: // Backtracking con poda
                 break;
             case 3: // Greedy
                 chooseAlgorithm();
@@ -53,39 +49,39 @@ public class WordSearch implements WordsSolver {
         return configuracio;
     }
 
-    /**
-     * Este metodo se encarga de elegir el algoritmo que se va a utilizar en el
-     * greedy
-     */
     private void chooseAlgorithm() {
-        while (heuristica < 1 || heuristica > 2) {
+        while (algoritmo < 1 || algoritmo > 2) {
             System.out.println("Escoge el tipo de algorismo que quieres utilizar:");
             System.out.println("1. Heuristica rapida");
             System.out.println("2. Heuristica lenta");
             Scanner sc = new Scanner(System.in);
-            heuristica = sc.nextInt();
+            algoritmo = sc.nextInt();
 
-            if (heuristica < 1 || heuristica > 2) {
+            if (algoritmo < 1 || algoritmo > 2) {
                 System.out.println("Has de seleccionar una opción correcta entre 1 y 2");
             }
 
         }
     }
 
-    /**
-     * Este metodo implementa el algoritmo greedy
-     */
     private void greedy() {
-        int contador = 0;
-        boolean trobat = false;
+        boolean encontrado = false;
 
-<<<<<<< HEAD
         for (int i = 0; i < configuracio.length; i++) {
             configuracio[i] = 0;
         }
 
         for (int y = 0; y < matriuCells.length && !encontrado; y++) {
             for (int x = 0; x < matriuCells.length && !encontrado; x++) {
+
+                /*
+                 * configuracio[0] = y;
+                 * configuracio[1] = x;
+                 * configuracio[2] = y;
+                 * configuracio[3] = x;
+                 * renderer.render(matriuCells, referent, configuracio, 100);
+                 */
+
                 if (matriuCells[y][x] == referent.charAt(0)) {
                     if (y + referent.length() - 1 < matriuCells.length) { // Abajo
                         if (heuristica(x, y, 1)) {
@@ -117,69 +113,19 @@ public class WordSearch implements WordsSolver {
                             encontrado = true;
                             break;
                         }
-=======
-        configuracio[0] = 0;
-        configuracio[1] = 0;
-        configuracio[2] = 0;
-        configuracio[3] = 0;
-
-        for (int x = 0; x < matriuCells.length && !trobat; x++) {
-            for (int y = 0; y < matriuCells.length && !trobat; y++) {
-                contador = 0;
-                if (matriuCells[y][x] == referent.charAt(contador)) {
-                    configuracio[contador] = y;
-                    contador++;
-                    configuracio[contador] = x;
-                    contador++;
-                    if (matriuCells[y][x + 1] == referent.charAt(contador) && x + 5 <= matriuCells.length) { // Derecha
-                        configuracio[contador] = y + 1;
-                        contador++;
-                        configuracio[contador] = x;
-                        System.out.println("Derecha");
-                        trobat = true;
                     }
-                    if (matriuCells[y + 1][x] == referent.charAt(contador) && y + 5 <= matriuCells.length) { // Abajo
-                        configuracio[contador] = y + 1;
-                        contador++;
-                        configuracio[contador] = x;
-                        System.out.println("Abajo");
-                        trobat = true;
-                    }
-                    if (matriuCells[y + 1][x + 1] == referent.charAt(contador) && y + 5 <= matriuCells.length
-                            && x + 5 <= matriuCells.length) { // Diagonal Derecha
-                        configuracio[contador] = x + 1;
-                        contador++;
-                        configuracio[contador] = y;
-                        System.out.println("Diagonal Derecha");
-                        trobat = true;
->>>>>>> parent of 22fda7e (greedy word solver done it ;))
-                    }
-
                 }
 
             }
+
         }
-<<<<<<< HEAD
         if (encontrado) {
             System.out.println("Se ha encontrdo la palabra");
-=======
-        if (trobat) {
-            System.out.println("S'ha trobat la paraula");
->>>>>>> parent of 22fda7e (greedy word solver done it ;))
         } else {
             System.out.println("No se ha encontrado la palabra");
         }
     }
 
-    /**
-     * Este metodo se encarga de comprobar si la palabra existe en la
-     * posicion indicada
-     *
-     * @param x
-     * @param y
-     * @param direccion
-     * @return
-     */
     private boolean heuristica(int x, int y, int direccion) {
         switch (algoritmo) {
             case 1: // Heuristica rapida

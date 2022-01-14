@@ -6,17 +6,11 @@ import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
 
 public class Menu {
-<<<<<<< HEAD
-    final int SIZE = 6;
-=======
-
-    final int MIN = 4;
     final int SIZE = 25;
->>>>>>> parent of 22fda7e (greedy word solver done it ;))
 
     public void show() {
 
-        int option = 0, labOption = 0, wordOption = 0;
+        int option = 0, backOption = 0, wordOption = 0;
         Scanner sc = new Scanner(System.in);
 
         while (option != 4) {
@@ -27,18 +21,20 @@ public class Menu {
 
             switch (option) {
                 case 1:
+                    backOption = 0;
                     // Arcade de Laberintos
-                    while (labOption == 0) {
+                    while (backOption == 0) {
                         System.out.println("\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
                         System.out.println("\t3. Branch and Bound");
                         System.out.print("\n\tElige una opción: ");
-                        labOption = sc.nextInt();
+                        backOption = sc.nextInt();
                     }
                     break;
                 case 2:
+                    wordOption = 0;
                     // Arcade de Palabras
-                    while (labOption == 0) {
+                    while (wordOption == 0) {
                         System.out.println("\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
                         System.out.println("\t3. Greedy");
@@ -48,15 +44,12 @@ public class Menu {
                     break;
                 case 3:
                     // Iniciar
-                    if (labOption == 0) {
+                    if (backOption == 0) {
                         System.out.println("Te falta elegir un algoritmo de Laberinto");
+                    } else if (wordOption == 0) {
+                        System.out.println("Te falta elegir un algoritmo de Palabras");
                     } else {
-                        if (wordOption == 0) {
-                            System.out.println("Te falta elegir un algoritmo de Palabras");
-                        } else {
-
-                            start(labOption, wordOption);
-                        }
+                        start(backOption, wordOption);
 
                     }
                     break;
@@ -73,9 +66,6 @@ public class Menu {
         }
     }
 
-    /**
-     * Método que muestra el menú
-     */
     private void printMenu() {
         System.out.println();
         System.out.println("Indicar las opciones de Arcade:\n");
@@ -86,14 +76,8 @@ public class Menu {
         System.out.print("Ingrese una opción: ");
     }
 
-    /**
-     * Inicia el Arcade
-     *
-     * @param labOption
-     * @param wordOption
-     */
-    private void start(int labOption, int wordOption) {
-        Labyrinth laberinto = new Labyrinth(labOption);
+    private void start(int backOption, int wordOption) {
+        Labyrinth laberinto = new Labyrinth(backOption);
         WordSearch palabras = new WordSearch(wordOption);
 
         Arcade arcade = new ArcadeBuilder()
