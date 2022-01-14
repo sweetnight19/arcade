@@ -75,11 +75,13 @@ public class WordSearch implements WordsSolver {
         for (int y = 0; y < matriuCells.length && !encontrado; y++) {
             for (int x = 0; x < matriuCells.length && !encontrado; x++) {
 
+                /*** Render ***/
                 configuracio[0] = y;
                 configuracio[1] = x;
                 configuracio[2] = y;
                 configuracio[3] = x;
                 renderer.render(matriuCells, referent, configuracio, 5);
+                /*** Render ***/
 
                 if (matriuCells[y][x] == referent.charAt(0)) {
                     if (y + referent.length() - 1 < matriuCells.length) { // Abajo

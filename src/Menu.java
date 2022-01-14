@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import LabyrinthSolver.Labyrinth;
@@ -16,13 +17,17 @@ public class Menu {
         while (option != 4) {
             printMenu();
 
-            // Leer la opción del usuario
-            option = sc.nextInt();
+            try {
+                // Leer la opción del usuario
+                option = sc.nextInt();
+            } catch (InputMismatchException e) {
+
+            }
 
             switch (option) {
                 case 1:
-                    backOption = 0;
                     // Arcade de Laberintos
+                    backOption = 0;
                     while (backOption < 1 || backOption > 3) {
                         System.out.println("\n\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
@@ -32,8 +37,8 @@ public class Menu {
                     }
                     break;
                 case 2:
-                    wordOption = 0;
                     // Arcade de Palabras
+                    wordOption = 0;
                     while (wordOption < 1 || wordOption > 3) {
                         System.out.println("\n\t1. Backtracking (pendiente de implementar)");
                         System.out.println("\t2. Backtracking con poda (pendiente de implementar)");
@@ -58,8 +63,10 @@ public class Menu {
                     sc.close();
                     break;
                 default:
-                    System.out.println("Opción incorrecta");
+                    System.out.println("\nOpción incorrecta");
                     System.out.println();
+                    option = 0;
+                    sc.nextLine();
                     break;
             }
 
