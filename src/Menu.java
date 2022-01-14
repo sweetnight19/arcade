@@ -6,7 +6,13 @@ import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
 
 public class Menu {
+<<<<<<< HEAD
     final int SIZE = 6;
+=======
+
+    final int MIN = 4;
+    final int SIZE = 25;
+>>>>>>> parent of 22fda7e (greedy word solver done it ;))
 
     public void show() {
 

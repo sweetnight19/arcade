@@ -38,6 +38,7 @@ public class Labyrinth implements LabyrinthSolver {
         long start;
         long elapsedTime;
 
+<<<<<<< HEAD
         switch (algoritmo) {
             case 1: // backtracking
                 start = System.nanoTime(); // Inicia el cuentareloj
@@ -58,6 +59,20 @@ public class Labyrinth implements LabyrinthSolver {
                 System.out.println("Ha terminado el Branch and Bound: " + elapsedTime / 1000000 + " milisegundos");
                 break;
 
+=======
+        if (algoritmo == 1) { // Backtracking
+            System.out.println("Backtracking con poda");
+            start = System.nanoTime(); // Inicia el cuentareloj
+            backtracking(configuracio, 0);
+            elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
+            System.out.println("Ha acabat el backtracking: " + elapsedTime / 1000000 + " milisegons");
+        } else { // Backtracking con poda
+            System.out.println("Backtracking con poda");
+            start = System.nanoTime(); // Inicia el cuentareloj
+            backtrackingWithOpt(configuracio, 0);
+            elapsedTime = System.nanoTime() - start; // Termina el cuentareloj
+            System.out.println("Ha acabat el backtracking amb poda:" + elapsedTime / 1000000 + " milisegons");
+>>>>>>> parent of 22fda7e (greedy word solver done it ;))
         }
 
         // printem per pantalla el resultat

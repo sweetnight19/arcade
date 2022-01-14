@@ -76,8 +76,10 @@ public class WordSearch implements WordsSolver {
      * Este metodo implementa el algoritmo greedy
      */
     private void greedy() {
-        boolean encontrado = false;
+        int contador = 0;
+        boolean trobat = false;
 
+<<<<<<< HEAD
         for (int i = 0; i < configuracio.length; i++) {
             configuracio[i] = 0;
         }
@@ -115,14 +117,55 @@ public class WordSearch implements WordsSolver {
                             encontrado = true;
                             break;
                         }
+=======
+        configuracio[0] = 0;
+        configuracio[1] = 0;
+        configuracio[2] = 0;
+        configuracio[3] = 0;
+
+        for (int x = 0; x < matriuCells.length && !trobat; x++) {
+            for (int y = 0; y < matriuCells.length && !trobat; y++) {
+                contador = 0;
+                if (matriuCells[y][x] == referent.charAt(contador)) {
+                    configuracio[contador] = y;
+                    contador++;
+                    configuracio[contador] = x;
+                    contador++;
+                    if (matriuCells[y][x + 1] == referent.charAt(contador) && x + 5 <= matriuCells.length) { // Derecha
+                        configuracio[contador] = y + 1;
+                        contador++;
+                        configuracio[contador] = x;
+                        System.out.println("Derecha");
+                        trobat = true;
                     }
+                    if (matriuCells[y + 1][x] == referent.charAt(contador) && y + 5 <= matriuCells.length) { // Abajo
+                        configuracio[contador] = y + 1;
+                        contador++;
+                        configuracio[contador] = x;
+                        System.out.println("Abajo");
+                        trobat = true;
+                    }
+                    if (matriuCells[y + 1][x + 1] == referent.charAt(contador) && y + 5 <= matriuCells.length
+                            && x + 5 <= matriuCells.length) { // Diagonal Derecha
+                        configuracio[contador] = x + 1;
+                        contador++;
+                        configuracio[contador] = y;
+                        System.out.println("Diagonal Derecha");
+                        trobat = true;
+>>>>>>> parent of 22fda7e (greedy word solver done it ;))
+                    }
+
                 }
 
             }
-
         }
+<<<<<<< HEAD
         if (encontrado) {
             System.out.println("Se ha encontrdo la palabra");
+=======
+        if (trobat) {
+            System.out.println("S'ha trobat la paraula");
+>>>>>>> parent of 22fda7e (greedy word solver done it ;))
         } else {
             System.out.println("No se ha encontrado la palabra");
         }
