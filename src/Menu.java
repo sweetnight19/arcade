@@ -6,7 +6,7 @@ import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
 
 public class Menu {
-    final int SIZE = 25;
+    final int SIZE = 17;
 
     public void show() {
 
@@ -24,10 +24,10 @@ public class Menu {
                     backOption = 0;
                     // Arcade de Laberintos
                     while (backOption == 0) {
-                        System.out.println("\t1. Backtracking");
+                        System.out.println("\n\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
                         System.out.println("\t3. Branch and Bound");
-                        System.out.print("\n\tElige una opción: ");
+                        System.out.print("\nElige una opción: ");
                         backOption = sc.nextInt();
                     }
                     break;
@@ -35,10 +35,10 @@ public class Menu {
                     wordOption = 0;
                     // Arcade de Palabras
                     while (wordOption == 0) {
-                        System.out.println("\t1. Backtracking");
+                        System.out.println("\n\t1. Backtracking");
                         System.out.println("\t2. Backtracking con poda");
                         System.out.println("\t3. Greedy");
-                        System.out.print("\n\tElige una opción: ");
+                        System.out.print("\nElige una opción: ");
                         wordOption = sc.nextInt();
                     }
                     break;

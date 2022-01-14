@@ -52,15 +52,16 @@ public class WordSearch implements WordsSolver {
     private void chooseAlgorithm() {
         while (algoritmo < 1 || algoritmo > 2) {
             System.out.println("Escoge el tipo de algorismo que quieres utilizar:");
-            System.out.println("1. Heuristica rapida");
-            System.out.println("2. Heuristica lenta");
+            System.out.println("\n\t1. Heuristica rapida");
+            System.out.println("\t2. Heuristica lenta");
+            System.out.println("\t3. Asegurar la solucion");
+            System.out.println("Elige una opción: ");
             Scanner sc = new Scanner(System.in);
             algoritmo = sc.nextInt();
 
             if (algoritmo < 1 || algoritmo > 2) {
                 System.out.println("Has de seleccionar una opción correcta entre 1 y 2");
             }
-
         }
     }
 
