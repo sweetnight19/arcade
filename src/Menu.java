@@ -40,7 +40,7 @@ public class Menu {
                     // Arcade de Palabras
                     wordOption = 0;
                     while (wordOption < 1 || wordOption > 3) {
-                        System.out.println("\n\t1. Backtracking (pendiente de implementar)");
+                        System.out.println("\n\t1. Backtracking");
                         System.out.println("\t2. Greedy");
                         System.out.print("\nElige una opción: ");
                         wordOption = sc.nextInt();
