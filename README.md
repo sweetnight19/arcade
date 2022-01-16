@@ -23,10 +23,12 @@ A continuación se clica en `+` dentro del apartado `java` del menú que aparece
 
 2. Inicializar mediante el botón `run` del `main` del módulo del cliente.
 
-3. Al ejecutar, se abre un menú que permite al usuario escoger `Arcade de Laberintos` que permite indicar el 
+3. En el fichero Menu.java se encuentra la constante `SIZE` que contiene medidas de los minijuegos.
+
+4. Al ejecutar, se abre un menú que permite al usuario escoger `Arcade de Laberintos` que permite indicar el 
 algoritmo para resolver el primer minijuego: El laberinto. A continuación la siguiente opción es 
 `Arcade de Palabras` donde podras tambien escoger el algoritmo.
-4. Ya inicados ambas estrategias, podras escoger el tercer campo `Iniciar`.
+5. Ya inicados ambas estrategias, podras escoger el tercer campo `Iniciar`.
     1. Se empezará por el primer minijuego: `El Laberinto` con el algoritmo escogido. Justo en el código en el fichero
    Labyrithn.java dentro de la carpeta src, verá las funciones de backtacking, backtrackingWithOpt y BrandAndBound con 
    una línea comentada de la variable renderer, si se descomenta, se verá el procedimiento que va siguiendo.
