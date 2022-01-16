@@ -7,7 +7,7 @@ import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
 
 public class Menu {
-    final int SIZE = 9;
+    final int SIZE = 101;
 
     public void show() {
 
@@ -98,5 +98,4 @@ public class Menu {
                 .build();
         arcade.run();
     }
-
 }

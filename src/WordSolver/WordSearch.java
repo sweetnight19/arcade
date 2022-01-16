@@ -1,5 +1,6 @@
 package WordSolver;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -10,18 +11,20 @@ public class WordSearch implements WordsSolver {
 
     private char[][] matriuCells;
     private int[] configuracio;
-    private int vMejor;
     private String referent;
     private int algoritmo;
     private int wordOption;
     private WordsRenderer renderer;
+    private Point[] configuracioFinal;
+    private boolean encontrada = false;
 
     // constructor
     public WordSearch(int wordOption) {
         configuracio = new int[4];
+        Arrays.fill(configuracio, 0);
+
         algoritmo = 0;
         this.wordOption = wordOption;
-        vMejor = 0;
     }
 
     @Override
@@ -33,12 +36,17 @@ public class WordSearch implements WordsSolver {
         referent = arg1;
         renderer = arg2;
 
+        configuracioFinal = new Point[referent.length()];
+        for (int i = 0; i < referent.length(); i++) {
+            configuracioFinal[i] = new Point(-1, -1);
+        }
+
         switch (wordOption) {
             case 1: // Backtracking
                 start = System.nanoTime(); // Inicia el cronometre
-                backtracking(configuracio, 0, referent);
+                backtracking(configuracioFinal, 0, referent);
                 elapsedTime = System.nanoTime() - start; // Acaba el cronometre
-                System.out.println("Ha terminado el Backtracking con " + elapsedTime / 1000 + " microsegundos");
+                System.out.println("Ha terminado el Backtracking con " + elapsedTime / 1000000 + " milisegundos");
                 // mostramos por pantalla el resultado
                 arg2.render(arg0, referent, configuracio);
                 break;
@@ -59,7 +67,7 @@ public class WordSearch implements WordsSolver {
     }
 
     private void chooseAlgorithm() {
-        while (algoritmo < 1 || algoritmo > 2) {
+        while (algoritmo < 1 || algoritmo > 3) {
             System.out.println("Escoge el tipo de algorismo que quieres utilizar:");
             System.out.println("\n\t1. Heuristica rapida");
             System.out.println("\t2. Heuristica lenta");
@@ -68,7 +76,7 @@ public class WordSearch implements WordsSolver {
             Scanner sc = new Scanner(System.in);
             algoritmo = sc.nextInt();
 
-            if (algoritmo < 1 || algoritmo > 2) {
+            if (algoritmo < 1 || algoritmo > 3) {
                 System.out.println("Has de seleccionar una opción correcta entre 1 y 2");
             }
         }
@@ -76,10 +84,6 @@ public class WordSearch implements WordsSolver {
 
     private void greedy() {
         boolean encontrado = false;
-
-        for (int i = 0; i < configuracio.length; i++) {
-            configuracio[i] = 0;
-        }
 
         for (int y = 0; y < matriuCells.length && !encontrado; y++) {
             for (int x = 0; x < matriuCells.length && !encontrado; x++) {
@@ -218,124 +222,207 @@ public class WordSearch implements WordsSolver {
         return false;
     }
 
-    private boolean haySucesor(int[] configuracio, int k) { // altura
-        return configuracio[k] < matriuCells.length && configuracio[k] < matriuCells.length && configuracio[2] == 0
-                && configuracio[3] == 0;
+    private boolean haySucesor(Point[] configuracio, int k, int x, int y) { // altura
+        return x < matriuCells.length && y < matriuCells.length;
     }
 
-    private int[] preparaRecorridoNivel(int[] configuracio, int k) {
-        Arrays.fill(configuracio, 0);
-        return configuracio;
+    private Point[] preparaRecorridoNivel(Point[] configuracioFinal, int k) {
+        configuracioFinal[k].setLocation(-1, -1);
+        return configuracioFinal;
     }
 
-    private int[] siguienteHermano(int[] configuracio, int k) { // amplada
-        if (k > matriuCells.length) {
-            configuracio[k] = 0;
-            configuracio[k + 1] += 1;
-        } else {
-            configuracio[k] += 1;
-            configuracio[k + 1] = 0;
-        }
-        return configuracio;
+    private Point[] siguienteHermano(Point[] configuracioFinal, int k, int x, int y) { // amplada
+        configuracioFinal[k].setLocation(x, y);
+        return configuracioFinal;
     }
 
-    private void tratarSolucion(int[] configuracioBkt, int k) {
+    private void tratarSolucion(Point[] configuracioFinal, int k) {
 
-        if (k >= vMejor || vMejor == 0) {
-            vMejor = k;
+        if (!encontrada) {
+            configuracio[0] = (int) configuracioFinal[0].getY();
+            configuracio[1] = (int) configuracioFinal[0].getX();
+            configuracio[2] = (int) configuracioFinal[referent.length() - 1].getY();
+            configuracio[3] = (int) configuracioFinal[referent.length() - 1].getX();
+            encontrada = true;
+            System.out.println("Se ha encontrado la palabra");
         }
     }
 
-    private boolean solucion(int[] configuracio, int k) {
-        return k == 2;
+    private boolean solucion(Point[] configuracionFinal, int k) {
+        boolean encontrada = true;
+        int j = -1;
+
+        if (k < referent.length() - 1) {
+            return false;
+        }
+        return true;
+
+        /*
+         * for (int i = 0; i < k; i++) {
+         * if (matriuCells[(int) configuracioFinal[i].getY()][(int)
+         * configuracioFinal[i].getX()] != referent
+         * .charAt(i)) {
+         * return false;
+         * }
+         * }
+         * 
+         * if (configuracionFinal[0].getX() + 1 == configuracionFinal[1].getX()
+         * && configuracionFinal[0].getY() == configuracionFinal[1].getY()) { // Derecha
+         * j = 0;
+         * }
+         * if (configuracionFinal[0].getX() == configuracionFinal[1].getX()
+         * && configuracionFinal[0].getY() + 1 == configuracionFinal[1].getY()) { //
+         * Abajo
+         * j = 1;
+         * }
+         * if (configuracionFinal[0].getX() + 1 == configuracionFinal[1].getX()
+         * && configuracionFinal[0].getY() + 1 == configuracionFinal[1].getY()) { //
+         * Diagonal
+         * j = 2;
+         * }
+         * for (int i = 0; i < k; i++) {
+         * switch (j) {
+         * case 0: // Derecha
+         * if (configuracionFinal[i].getX() + 1 == configuracionFinal[i + 1].getX()
+         * && configuracionFinal[i].getY() == configuracionFinal[i + 1].getY()) {
+         * encontrada = true;
+         * } else {
+         * encontrada = false;
+         * }
+         * break;
+         * case 1: // Abajo
+         * if (configuracionFinal[i].getX() == configuracionFinal[i + 1].getX()
+         * && configuracionFinal[i].getY() + 1 == configuracionFinal[i + 1].getY()) {
+         * encontrada = true;
+         * } else {
+         * encontrada = false;
+         * }
+         * break;
+         * case 2: // Diagonal
+         * if (configuracionFinal[i].getX() + 1 == configuracionFinal[i + 1].getX()
+         * && configuracionFinal[i].getY() + 1 == configuracionFinal[i + 1].getY()) {
+         * encontrada = true;
+         * } else {
+         * encontrada = false;
+         * }
+         * break;
+         * }
+         * 
+         * }
+         * return encontrada;
+         */
+
     }
 
-    private boolean buena(int[] configuracio, int k, String referent) {
-        boolean buena = false;
-        algoritmo = 3;
+    private boolean buena(Point[] configuracionFinal, int k, String referent) {
+        boolean encontrada = true;
+        int j = -1;
 
-        System.out.println("algoritmo: " + algoritmo);
+        // comprovar si la posicio es la correcta
+        if (matriuCells[(int) configuracionFinal[k].getY()][(int) configuracionFinal[k].getX()] != referent.charAt(k)) {
+            return false;
+        }
 
-        for (int y = 0; y < matriuCells.length && !buena; y++) {
-            for (int x = 0; x < matriuCells.length && !buena; x++) {
-
-                /*** Render ***/
-                configuracio[0] = y;
-                configuracio[1] = x;
-                configuracio[2] = y;
-                configuracio[3] = x;
-                renderer.render(matriuCells, referent, configuracio, 200);
-                /*** Render ***/
-
-                if (matriuCells[y][x] == referent.charAt(0)) {
-                    if (y + referent.length() - 1 < matriuCells.length) { // Abajo
-                        if (heuristica(x, y, 1)) {
-                            configuracio[0] = y;
-                            configuracio[1] = x;
-                            configuracio[2] = y + referent.length() - 1;
-                            configuracio[3] = x;
-                            buena = true;
-
+        if (k == 1) {
+            if (configuracionFinal[k - 1].getX() + 1 == configuracionFinal[k].getX()
+                    && configuracionFinal[k - 1].getY() + 1 == configuracionFinal[k].getY()) { // Diagonal
+                return true;
+            }
+            if (configuracionFinal[k - 1].getX() + 1 == configuracionFinal[k].getX()
+                    && configuracionFinal[k - 1].getY() == configuracionFinal[k].getY()) { // Derecha
+                return true;
+            }
+            if (configuracionFinal[k - 1].getX() == configuracionFinal[k].getX()
+                    && configuracionFinal[k - 1].getY() + 1 == configuracionFinal[k].getY()) { // Abajo
+                return true;
+            }
+            return false;
+        }
+        if (k > 1) {
+            if (configuracionFinal[0].getX() + 1 == configuracionFinal[1].getX()
+                    && configuracionFinal[0].getY() + 1 == configuracionFinal[1].getY()) { // Diagonal
+                j = 2;
+            } else if (configuracionFinal[0].getX() + 1 == configuracionFinal[1].getX()
+                    && configuracionFinal[0].getY() == configuracionFinal[1].getY()) { // Derecha
+                j = 0;
+            } else if (configuracionFinal[0].getX() == configuracionFinal[1].getX()
+                    && configuracionFinal[0].getY() + 1 == configuracionFinal[1].getY()) { // Abajo
+                j = 1;
+            }
+            for (int i = 1; i < k; i++) {
+                switch (j) {
+                    case 0: // Derecha
+                        if (configuracionFinal[i].getX() + 1 == configuracionFinal[i + 1].getX()
+                                && configuracionFinal[i].getY() == configuracionFinal[i + 1].getY()) {
+                            encontrada = true;
+                        } else {
+                            return false;
                         }
-                    }
-                    if (x + referent.length() - 1 < matriuCells.length) { // Derecha
-                        if (heuristica(x, y, 2)) {
-                            configuracio[0] = y;
-                            configuracio[1] = x;
-                            configuracio[2] = y;
-                            configuracio[3] = x + referent.length() - 1;
-                            buena = true;
+                        break;
+                    case 1: // Abajo
+                        if (configuracionFinal[i].getX() == configuracionFinal[i + 1].getX()
+                                && configuracionFinal[i].getY() + 1 == configuracionFinal[i + 1].getY()) {
+                            encontrada = true;
+                        } else {
+                            return false;
                         }
-                    }
-                    if (y + referent.length() - 1 < matriuCells.length
-                            && x + referent.length() - 1 < matriuCells.length) { // Diagonal
-                        if (heuristica(x, y, 3)) {
-                            configuracio[0] = y;
-                            configuracio[1] = x;
-                            configuracio[2] = y + referent.length() - 1;
-                            configuracio[3] = x + referent.length() - 1;
-                            buena = true;
+                        break;
+                    case 2: // Diagonal
+                        if (configuracionFinal[i].getX() + 1 == configuracionFinal[i + 1].getX()
+                                && configuracionFinal[i].getY() + 1 == configuracionFinal[i + 1].getY()) {
+                            encontrada = true;
+                        } else {
+                            return false;
                         }
-                    }
-
+                        break;
                 }
 
             }
+            return encontrada;
 
         }
-        if (buena) {
-            System.out.println("Se ha encontrdo la palabra");
-        } else {
-            System.out.println("No se ha encontrado la palabra");
-        }
-        return buena;
+
+        return true;
     }
 
-    private void backtracking(int[] configuracio, int k, String referent) {
+    private void backtracking(Point[] configuracioFinal, int k, String referent) {
+        int x = 0, y = 0;
 
-        configuracio = preparaRecorridoNivel(configuracio, k);
+        configuracioFinal = preparaRecorridoNivel(configuracioFinal, k);
+        while (haySucesor(configuracioFinal, k, x, y)) {
+            configuracioFinal = siguienteHermano(configuracioFinal, k, x, y);
 
-        while (haySucesor(configuracio, k)) {
+            if (solucion(configuracioFinal, k)) {
+                if (buena(configuracioFinal, k, referent)) {
 
-            configuracio = siguienteHermano(configuracio, k);
+                    // int[] test = new int[4];
+                    // test[0] = (int) configuracioFinal[0].getY();
+                    // test[1] = (int) configuracioFinal[0].getX();
+                    // test[2] = y;
+                    // test[3] = x;
+                    // renderer.render(matriuCells, referent, test, 10);
 
-            renderer.render(matriuCells, referent, configuracio);
-
-            if (solucion(configuracio, k)) {
-
-                if (buena(configuracio, k, referent)) {
-
-                    tratarSolucion(configuracio, k);
+                    tratarSolucion(configuracioFinal, k);
                 }
-
             } else {
-                if (buena(configuracio, k, referent)) {
+                if (buena(configuracioFinal, k, referent)) {
 
-                    backtracking(configuracio, k + 2, referent);
+                    // int[] test = new int[4];
+                    // test[0] = (int) configuracioFinal[0].getY();
+                    // test[1] = (int) configuracioFinal[0].getX();
+                    // test[2] = y;
+                    // test[3] = x;
+                    // renderer.render(matriuCells, referent, test, 10);
+
+                    backtracking(configuracioFinal, k + 1, referent);
                 }
             }
+            if (x < matriuCells.length - 1) {
+                x++;
+            } else {
+                x = 0;
+                y++;
+            }
         }
-
     }
-
 }
