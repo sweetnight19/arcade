@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import javax.swing.Renderer;
-
 import edu.salleurl.arcade.labyrinth.controller.LabyrinthRenderer;
 import edu.salleurl.arcade.labyrinth.model.LabyrinthSolver;
 import edu.salleurl.arcade.labyrinth.model.enums.Cell;
@@ -110,7 +108,7 @@ public class Labyrinth implements LabyrinthSolver {
         configuracio = preparaRecorridoNivel(configuracio, k);
         while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            // renderer.render(matriuCells, configuracio.subList(0, k), 10);
+            // renderer.render(matriuCells, configuracio.subList(0, k), 20);
             switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {
@@ -134,7 +132,7 @@ public class Labyrinth implements LabyrinthSolver {
         configuracio = preparaRecorridoNivel(configuracio, k);
         while (haySucesor(configuracio, k, numDecisiones)) {
             configuracio = siguienteHermano(configuracio, k, numDecisiones);
-            // renderer.render(matriuCells, configuracio.subList(0, k), 100);
+            // renderer.render(matriuCells, configuracio.subList(0, k), 20);
             switch (mirarPosicio(configuracio, k)) {
                 case EXIT:
                     if (buena(configuracio, k, numDecisiones)) {

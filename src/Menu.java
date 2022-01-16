@@ -7,7 +7,7 @@ import edu.salleurl.arcade.Arcade;
 import edu.salleurl.arcade.ArcadeBuilder;
 
 public class Menu {
-    final int SIZE = 89;
+    final int SIZE = 9;
 
     public void show() {
 
@@ -41,8 +41,7 @@ public class Menu {
                     wordOption = 0;
                     while (wordOption < 1 || wordOption > 3) {
                         System.out.println("\n\t1. Backtracking (pendiente de implementar)");
-                        System.out.println("\t2. Backtracking con poda (pendiente de implementar)");
-                        System.out.println("\t3. Greedy");
+                        System.out.println("\t2. Greedy");
                         System.out.print("\nElige una opción: ");
                         wordOption = sc.nextInt();
                     }
