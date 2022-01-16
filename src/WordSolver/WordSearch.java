@@ -249,68 +249,11 @@ public class WordSearch implements WordsSolver {
     }
 
     private boolean solucion(Point[] configuracionFinal, int k) {
-        boolean encontrada = true;
-        int j = -1;
 
         if (k < referent.length() - 1) {
             return false;
         }
         return true;
-
-        /*
-         * for (int i = 0; i < k; i++) {
-         * if (matriuCells[(int) configuracioFinal[i].getY()][(int)
-         * configuracioFinal[i].getX()] != referent
-         * .charAt(i)) {
-         * return false;
-         * }
-         * }
-         * 
-         * if (configuracionFinal[0].getX() + 1 == configuracionFinal[1].getX()
-         * && configuracionFinal[0].getY() == configuracionFinal[1].getY()) { // Derecha
-         * j = 0;
-         * }
-         * if (configuracionFinal[0].getX() == configuracionFinal[1].getX()
-         * && configuracionFinal[0].getY() + 1 == configuracionFinal[1].getY()) { //
-         * Abajo
-         * j = 1;
-         * }
-         * if (configuracionFinal[0].getX() + 1 == configuracionFinal[1].getX()
-         * && configuracionFinal[0].getY() + 1 == configuracionFinal[1].getY()) { //
-         * Diagonal
-         * j = 2;
-         * }
-         * for (int i = 0; i < k; i++) {
-         * switch (j) {
-         * case 0: // Derecha
-         * if (configuracionFinal[i].getX() + 1 == configuracionFinal[i + 1].getX()
-         * && configuracionFinal[i].getY() == configuracionFinal[i + 1].getY()) {
-         * encontrada = true;
-         * } else {
-         * encontrada = false;
-         * }
-         * break;
-         * case 1: // Abajo
-         * if (configuracionFinal[i].getX() == configuracionFinal[i + 1].getX()
-         * && configuracionFinal[i].getY() + 1 == configuracionFinal[i + 1].getY()) {
-         * encontrada = true;
-         * } else {
-         * encontrada = false;
-         * }
-         * break;
-         * case 2: // Diagonal
-         * if (configuracionFinal[i].getX() + 1 == configuracionFinal[i + 1].getX()
-         * && configuracionFinal[i].getY() + 1 == configuracionFinal[i + 1].getY()) {
-         * encontrada = true;
-         * } else {
-         * encontrada = false;
-         * }
-         * break;
-         * }
-         * 
-         * }
-         * return encontrada;
-         */
 
     }
 
@@ -338,6 +281,7 @@ public class WordSearch implements WordsSolver {
             }
             return false;
         }
+
         if (k > 1) {
             if (configuracionFinal[0].getX() + 1 == configuracionFinal[1].getX()
                     && configuracionFinal[0].getY() + 1 == configuracionFinal[1].getY()) { // Diagonal
